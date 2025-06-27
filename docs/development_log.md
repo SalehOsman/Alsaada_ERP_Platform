@@ -329,6 +329,28 @@
 
 ---
 
+**تحسين توسيط محتوى الشريط الجانبي وإضافة حواف مناسبة**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - ضبط حدود التباعد في التخطيط الداخلي لمنح مسافة حول الأزرار.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - إضافة حشوة للأزرار وتعديل حالتي hover و active لتوسيط النص والأيقونة.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
+
+## 2025-07-10
+
+---
+
+**تصحيح اتجاهات الشريط الجانبي ومسافات المحتوى**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - تعيين اتجاه الأزرار إلى RightToLeft ليتماشى مع الواجهة العربية.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - إزالة التوسيط التلقائي للأزرار والإبقاء عليه فقط للزر النشط مع الحفاظ على الحشوة الجانبية.
+=======
 **تحسين تصميم الهيدر وإضافة بيانات الشركة**
 
 - **D:\\Alsaada-ERP\\Alsaada_ERP_Platform\\app\\core\\company_info.py**

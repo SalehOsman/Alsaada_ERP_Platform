@@ -52,8 +52,13 @@ class SidebarWidget(QWidget):
 
         # layout داخلي
         layout = QVBoxLayout(self.frame)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setContentsMargins(
+            self._padding_lr,
+            self._padding_lr,
+            self._padding_lr,
+            self._padding_lr,
+        )
+        layout.setSpacing(ThemeManager.spacing)
 
         self._buttons: dict[str, QPushButton] = {}
         self._section_keys = []
@@ -72,7 +77,8 @@ class SidebarWidget(QWidget):
 
         for idx, (key, text, fa_name, icon) in enumerate(sections):
             button = QPushButton("", self.frame)
-            button.setLayoutDirection(Qt.LeftToRight)
+            # use RTL direction so النص والأيقونة تظهر بشكل صحيح
+            button.setLayoutDirection(Qt.RightToLeft)
             button.setCursor(Qt.PointingHandCursor)
             button._fa_name = fa_name
             button._icon_path = icon
