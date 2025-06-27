@@ -5,14 +5,6 @@
 */
 
 
-SidebarWidget {{
-    background: {sidebar_bg};
-    min-width: 60px;
-    border-right: 1px solid {secondary_light};
-}}
-
-SidebarWidget QPushButton {{
-=======
 SidebarWidget {
     background: {sidebar_bg};
     min-width: 60px;
@@ -20,20 +12,11 @@ SidebarWidget {
 }
 
 SidebarWidget QPushButton {
-
     color: {sidebar_text};
     text-align: right;
     padding: {spacing}px;
     border-radius: {radius_small}px;
     background: transparent;
-
-}}
-
-SidebarWidget QPushButton:hover {{
-    background: {sidebar_hover_bg};
-    color: {sidebar_hover_text};
-}}
-=======
 }
 
 SidebarWidget QPushButton:hover {
@@ -41,16 +24,10 @@ SidebarWidget QPushButton:hover {
     color: {sidebar_hover_text};
 }
 
-
 SidebarWidget QPushButton:checked,
 SidebarWidget QPushButton:pressed {
     background: {sidebar_active_bg};
     color: {sidebar_active_text};
-
-}}
-
-SidebarWidget QLabel {{
-=======
 }
 
 SidebarWidget QLabel {
