@@ -12,9 +12,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QLabel,
     QFrame,
+    QGraphicsDropShadowEffect,
 )
 from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QColor
 
 try:
     import qtawesome as qta
@@ -34,9 +35,17 @@ class SidebarWidget(QWidget):
         self._expanded_width = 200
         self.settings = QSettings("AlsaadaERP", "AlsaadaERP")
         self.pinned = self.settings.value(self.PIN_KEY, False, bool)
-        self.setFixedWidth(self._expanded_width if self.pinned else self._collapsed_width)
+        self.setFixedWidth(
+            self._expanded_width if self.pinned else self._collapsed_width
+        )
         self.setProperty("collapsed", not self.pinned)
         self.setMouseTracking(True)
+
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(15)
+        shadow.setOffset(-3, 0)
+        shadow.setColor(QColor(0, 0, 0, 60))
+        self.setGraphicsEffect(shadow)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
@@ -45,13 +54,28 @@ class SidebarWidget(QWidget):
         self._buttons: dict[str, QPushButton] = {}
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
         sections = [
-            ("dashboard", "الرئيسية", "fa5s.tachometer-alt", icon_dir / "dashboard.svg"),
-            ("component_guide", "دليل المكونات", "fa5s.puzzle-piece", icon_dir / "guide.svg"),
+            (
+                "dashboard",
+                "الرئيسية",
+                "fa5s.tachometer-alt",
+                icon_dir / "dashboard.svg",
+            ),
+            (
+                "component_guide",
+                "دليل المكونات",
+                "fa5s.puzzle-piece",
+                icon_dir / "guide.svg",
+            ),
             ("employees", "العاملون", "fa5s.users", icon_dir / "employees.svg"),
             ("finance", "المالية", "fa5s.chart-line", icon_dir / "finance.svg"),
             ("equipment", "المعدات", "fa5s.tools", icon_dir / "equipment.svg"),
             ("projects", "المشاريع", "fa5s.project-diagram", icon_dir / "projects.svg"),
-            ("daily_ops", "العمليات اليومية", "fa5s.calendar-alt", icon_dir / "daily_ops.svg"),
+            (
+                "daily_ops",
+                "العمليات اليومية",
+                "fa5s.calendar-alt",
+                icon_dir / "daily_ops.svg",
+            ),
             ("notes", "الملاحظات", "fa5s.sticky-note", icon_dir / "notes.svg"),
             ("settings", "الإعدادات", "fa5s.cog", icon_dir / "settings.svg"),
         ]
@@ -130,9 +154,9 @@ class SidebarWidget(QWidget):
 
     def _update_pin_icon(self) -> None:
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
-        name = "pin.svg" if self.pinned else "unpin.svg"
+        name = "unpin.svg" if self.pinned else "pin.svg"
         if qta:
-            fa_name = "fa5s.thumbtack" if self.pinned else "fa5s.times"
+            fa_name = "fa5s.times" if self.pinned else "fa5s.thumbtack"
             self.pin_btn.setIcon(qta.icon(fa_name))
         else:
             self.pin_btn.setIcon(QIcon(str(icon_dir / name)))

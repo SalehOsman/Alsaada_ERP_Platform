@@ -22,6 +22,7 @@ SidebarWidget QPushButton {
     border-radius: {radius_small}px;
     background: transparent;
     text-align: center;
+    font-weight: bold;
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 
@@ -54,7 +55,11 @@ SidebarWidget QFrame {
 }
 
 SidebarWidget QLabel {
-    color: {sidebar_text};
     margin-top: {spacing}px;
     margin-bottom: {spacing}px;
+    font-weight: bold;
+}
+
+SidebarWidget[collapsed="false"] QLabel {
+    color: {primary};
 }
