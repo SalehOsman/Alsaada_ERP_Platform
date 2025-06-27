@@ -1,3 +1,8 @@
+# main_window.py
+# الغرض: إنشاء النافذة الرئيسية للتطبيق وتجميع الودجات الرئيسة
+# المؤلف: صالح عثمان
+# تاريخ التعديل: 2025-06-28
+
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -37,15 +42,13 @@ class MainWindow(QMainWindow):
         body_layout.setSpacing(0)
 
         self.sidebar = SidebarWidget()
-        self.sidebar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.sidebar.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         body_layout.addWidget(self.sidebar)
 
         self.stack = QStackedWidget()
         self.stack.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         body_layout.addWidget(self.stack)
-        # Use golden ratio for sidebar vs main area (100:162 ≈ 1:1.618)
-        body_layout.setStretch(0, 100)
-        body_layout.setStretch(1, 162)
+        body_layout.setStretch(1, 1)
 
         main_layout.addWidget(body, 1)
 
