@@ -59,7 +59,7 @@ class ThemeManager:
         "accent_light": "#ffa96b",
     }
 
-    palette: dict[str, str] = light_palette.copy()
+    palette: dict[str, str] = dark_palette.copy()
 
     font_family: str = "Arial"
     font_size: int = 12
@@ -70,7 +70,7 @@ class ThemeManager:
     icon_size_expanded: int = 24
     icon_size_collapsed: int = 32
 
-    dark_mode: bool = False
+    dark_mode: bool = True
 
     @classmethod
     def switch_mode(cls, dark: bool) -> None:
