@@ -80,7 +80,7 @@ class SidebarWidget(QWidget):
             ("settings", "الإعدادات", "fa5s.cog", icon_dir / "settings.svg"),
         ]
 
-        for key, text, fa_name, icon in sections:
+        for i, (key, text, fa_name, icon) in enumerate(sections):
             button = QPushButton("", self)
             button.setLayoutDirection(Qt.RightToLeft)
             if qta:
@@ -94,6 +94,10 @@ class SidebarWidget(QWidget):
             button._label = text  # type: ignore[attr-defined]
             layout.addWidget(button)
             self._buttons[key] = button
+            if i < len(sections) - 1:
+                sep = QFrame()
+                sep.setFrameShape(QFrame.HLine)
+                layout.addWidget(sep)
 
         divider = QFrame()
         divider.setFrameShape(QFrame.HLine)
