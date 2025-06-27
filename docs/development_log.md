@@ -102,6 +102,24 @@
 
 ---
 
+
+**معالجة خطأ تطبيق الأنماط**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\main.qss**
+    - تصحيح استخدام الأقواس المزدوجة ليعمل التنسيق مع ThemeManager بدون أخطاء.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - تعديل الأقواس المزدوجة لضمان عدم تعطل التطبيق عند تحميل الأنماط.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
+
+## 2025-06-28
+
+---
+
+=======
+
 **تحديث سلوك وتصميم الشريط الجانبي**
 
 - **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
