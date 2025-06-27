@@ -1,0 +1,15 @@
+/* input.qss
+   Basic input styles
+   Author: OpenAI Codex
+   Date: 2025-06-30
+*/
+
+QLineEdit, QComboBox, QSpinBox {
+    border: 1px solid {secondary_light};
+    border-radius: {radius_small}px;
+    padding: 4px;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
+    border-color: {primary};
+}

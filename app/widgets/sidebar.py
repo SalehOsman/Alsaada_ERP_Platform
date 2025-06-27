@@ -205,10 +205,6 @@ class SidebarWidget(QWidget):
         self.frame.repaint()
 
     def _refresh_sidebar_style(self, collapsed: bool):
-        if not collapsed:
-            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["secondary"]))
-        else:
-            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["primary"]))
         self.shadow.setColor(QColor(0, 0, 0, 130))
         self.style().polish(self)
         self.frame.update()
@@ -224,26 +220,10 @@ class SidebarWidget(QWidget):
             if collapsed:
                 btn.setText("")
                 icon_color = ThemeManager.palette["secondary"]
-                btn.setStyleSheet(
-                    "background: transparent; border: none; margin: 0; padding: 0;"
-                    f"qproperty-iconSize: {self._icon_size_collapsed}px {self._icon_size_collapsed}px;"
-                )
             else:
                 if is_active:
                     btn.setText(btn._label)
                     icon_color = ThemeManager.palette["secondary"]
-                    btn.setStyleSheet(
-                        f"""
-                        background: {ThemeManager.palette['primary']};
-                        color: {ThemeManager.palette['secondary']};
-                        border: none;
-                        text-align: center;
-                        font-weight: bold;
-                        padding-left: {self._padding_lr}px;
-                        padding-right: {self._padding_lr}px;
-                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
-                        """
-                    )
                     shadow = QGraphicsDropShadowEffect(btn)
                     shadow.setBlurRadius(14)
                     shadow.setOffset(0, 0)
@@ -252,18 +232,6 @@ class SidebarWidget(QWidget):
                 else:
                     btn.setText(btn._label)
                     icon_color = ThemeManager.palette["primary"]
-                    btn.setStyleSheet(
-                        f"""
-                        background: transparent;
-                        color: {ThemeManager.palette['primary']};
-                        border: none;
-                        text-align: left;
-                        font-weight: bold;
-                        padding-left: {self._padding_lr}px;
-                        padding-right: {self._padding_lr}px;
-                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
-                        """
-                    )
             if qta:
                 btn.setIcon(qta.icon(btn._fa_name, color=icon_color))
             else:

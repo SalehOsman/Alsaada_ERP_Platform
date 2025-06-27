@@ -1,0 +1,22 @@
+/* button.qss
+   Basic button styles
+   Author: OpenAI Codex
+   Date: 2025-06-30
+*/
+
+QPushButton {
+    padding: 6px 12px;
+    border-radius: {radius_small}px;
+}
+
+QPushButton:hover {
+    background-color: {primary_light};
+}
+
+QPushButton:pressed {
+    background-color: {primary_dark};
+}
+
+QPushButton:disabled {
+    background-color: {primary_disabled};
+}

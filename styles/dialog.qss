@@ -1,0 +1,12 @@
+/* dialog.qss
+   Basic dialog style
+   Author: OpenAI Codex
+   Date: 2025-06-30
+*/
+
+QDialog {
+    background: {secondary};
+    color: {primary};
+    border-radius: {radius_medium}px;
+    padding: {spacing}px;
+}
