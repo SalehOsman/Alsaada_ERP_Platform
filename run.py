@@ -9,7 +9,7 @@ def main() -> None:
     app = QApplication(sys.argv)
     app.setLayoutDirection(Qt.RightToLeft)
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     sys.exit(app.exec())
 
 
