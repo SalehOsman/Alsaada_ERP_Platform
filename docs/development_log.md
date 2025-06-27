@@ -179,3 +179,20 @@
 **جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
 
 ---
+
+## 2025-06-30
+
+---
+
+**تصحيح ألوان وحجم أيقونات الشريط الجانبي**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - تفعيل تحديث خلفية الوضع المصغر وإضافة متغيرات حجم الأيقونة.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - ضبط حجم الأيقونات تلقائيًا وتحديث التاريخ.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\theme_manager.py**
+    - إضافة متغيرات icon_size_expanded و icon_size_collapsed لدعم التحكم في حجم الأيقونات.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
