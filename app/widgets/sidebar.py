@@ -1,6 +1,5 @@
 # sidebar.py
-# جميع العناصر غير الفعالة محاذاة شمال (left) عند الفتح
-# العنصر الفعال وسط – مع شادو – أيقونة الدبوس بالأساسي دائماً
+# حل ذكي: الأيقونات باللون الأساسي عند أول تحميل، ثم تعود للألوان الصحيحة مع أول تفاعل
 # صالح عثمان – 2025-06-30
 
 from __future__ import annotations
@@ -29,11 +28,13 @@ class SidebarWidget(QWidget):
         self._expanded_width = 200
         self._icon_size_collapsed = 36
         self._icon_size_expanded = 24
+        self._padding_lr = 14
         self.settings = QSettings("AlsaadaERP", "AlsaadaERP")
         self.pinned = self.settings.value(self.PIN_KEY, False, bool)
         self.setFixedWidth(self._expanded_width if self.pinned else self._collapsed_width)
         self.setProperty("collapsed", not self.pinned)
         self.setMouseTracking(True)
+        self._initialized = False  # لمعالجة أول تهيئة بصرية
 
         # شادو يسار القائمة فقط
         self.shadow = QGraphicsDropShadowEffect(self)
@@ -46,7 +47,6 @@ class SidebarWidget(QWidget):
         self.frame = QFrame(self)
         self.frame.setObjectName("SidebarMainFrame")
         self.frame.setGeometry(0, 0, self._collapsed_width, self.height())
-        self._refresh_sidebar_style(collapsed=not self.pinned)
 
         # layout داخلي
         layout = QVBoxLayout(self.frame)
@@ -70,7 +70,7 @@ class SidebarWidget(QWidget):
 
         for idx, (key, text, fa_name, icon) in enumerate(sections):
             button = QPushButton("", self.frame)
-            button.setLayoutDirection(Qt.LeftToRight)  # <-- التغيير هنا!
+            button.setLayoutDirection(Qt.LeftToRight)
             button.setCursor(Qt.PointingHandCursor)
             button._fa_name = fa_name
             button._icon_path = icon
@@ -83,6 +83,12 @@ class SidebarWidget(QWidget):
             button.setFont(QFont("Cairo", 12))
             button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
+            # عند التهيئة: كل الأيقونات باللون الأساسي
+            if qta:
+                button.setIcon(qta.icon(fa_name, color=ThemeManager.palette["primary"]))
+            else:
+                button.setIcon(QIcon(str(icon)))
+            button.setIconSize(QSize(self._icon_size_collapsed, self._icon_size_collapsed))
             self._buttons[key] = button
             self._section_keys.append(key)
             layout.addWidget(button)
@@ -94,21 +100,44 @@ class SidebarWidget(QWidget):
         self.pin_btn.setMinimumHeight(45)
         self.pin_btn.setMaximumHeight(52)
         self.pin_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self._update_pin_icon()
         self.pin_btn.clicked.connect(self._toggle_pinned)
+        # لون أيقونة الدبوس الأساسي فقط (حتى التفاعل)
+        if qta:
+            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["primary"]))
+        else:
+            icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
+            self.pin_btn.setIcon(QIcon(str(icon_dir / "pin.svg")))
         layout.addWidget(self.pin_btn)
 
         self._animation = QPropertyAnimation(self, b"minimumWidth")
         self._animation.setDuration(200)
 
         self._active_key = "dashboard"
-        self._update_selection()
+
+        # الوضع الافتراضي – يبدأ دائماً مغلق (collapsed) إذا لم يكن مثبّتاً
+        if self.pinned:
+            self.expand()
+        else:
+            self.collapse()
+
+        self.update()
+        self.frame.update()
+        self.repaint()
+        self.frame.repaint()
 
     def resizeEvent(self, event):
         self.frame.setGeometry(0, 0, self.width(), self.height())
         super().resizeEvent(event)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+        # عند أول حدث تفاعل (hover)، فعّل collapse() لإعادة الألوان والتنسيقات الديناميكية
+        if not self._initialized and (event.type() == QEvent.Enter):
+            self._initialized = True
+            self.collapse()  # تعيد تعيين الألوان الصحيحة فور أول تفاعل
+            self.update()
+            self.frame.update()
+            self.repaint()
+            self.frame.repaint()
         if isinstance(obj, QPushButton) and event.type() == QEvent.Enter:
             if not self.pinned:
                 self.expand()
@@ -154,6 +183,10 @@ class SidebarWidget(QWidget):
         self.setProperty("collapsed", False)
         self._refresh_sidebar_style(collapsed=False)
         self._update_selection()
+        self.update()
+        self.frame.update()
+        self.repaint()
+        self.frame.repaint()
 
     def collapse(self) -> None:
         if self.width() == self._collapsed_width:
@@ -166,9 +199,12 @@ class SidebarWidget(QWidget):
         self.setProperty("collapsed", True)
         self._refresh_sidebar_style(collapsed=True)
         self._update_selection()
+        self.update()
+        self.frame.update()
+        self.repaint()
+        self.frame.repaint()
 
     def _refresh_sidebar_style(self, collapsed: bool):
-        # لون خلفية الشريط الجانبي بحسب الحالة – مع شادو واضح دائمًا
         if not collapsed:
             self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["secondary"]))
         else:
@@ -179,7 +215,6 @@ class SidebarWidget(QWidget):
 
     def _update_selection(self):
         collapsed = self.property("collapsed")
-        # العنصر الفعال الافتراضي إذا لم يضغط المستخدم
         if not any(btn.isChecked() for btn in self._buttons.values()):
             self._buttons[self._active_key].setChecked(True)
 
@@ -204,10 +239,11 @@ class SidebarWidget(QWidget):
                         border: none;
                         text-align: center;
                         font-weight: bold;
+                        padding-left: {self._padding_lr}px;
+                        padding-right: {self._padding_lr}px;
                         qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
                         """
                     )
-                    # شادو خفيف للزر الفعال فقط
                     shadow = QGraphicsDropShadowEffect(btn)
                     shadow.setBlurRadius(14)
                     shadow.setOffset(0, 0)
@@ -223,6 +259,8 @@ class SidebarWidget(QWidget):
                         border: none;
                         text-align: left;
                         font-weight: bold;
+                        padding-left: {self._padding_lr}px;
+                        padding-right: {self._padding_lr}px;
                         qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
                         """
                     )
