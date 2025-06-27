@@ -1,3 +1,8 @@
+# theme_manager.py
+# الغرض: إدارة وتطبيق سمات الألوان والخطوط على الواجهة
+# المؤلف: صالح عثمان
+# تاريخ التعديل: 2025-06-30
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -62,6 +67,8 @@ class ThemeManager:
     radius_small: int = 4
     radius_medium: int = 8
     spacing: int = 8
+    icon_size_expanded: int = 24
+    icon_size_collapsed: int = 32
 
     dark_mode: bool = False
 
@@ -92,6 +99,8 @@ class ThemeManager:
                 "radius_small": cls.radius_small,
                 "radius_medium": cls.radius_medium,
                 "spacing": cls.spacing,
+                "icon_size_expanded": cls.icon_size_expanded,
+                "icon_size_collapsed": cls.icon_size_collapsed,
             }
             pattern = re.compile(r"{([a-zA-Z0-9_]+)}")
 
