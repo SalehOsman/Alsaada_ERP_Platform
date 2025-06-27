@@ -6,10 +6,8 @@ from PySide6.QtWidgets import (
     QComboBox,
     QPushButton,
     QColorDialog,
-    QCheckBox,
 )
 from PySide6.QtGui import QColor
-from PySide6.QtCore import Qt
 from ...core.style_manager import StyleManager
 from ...core.theme_manager import ThemeManager
 
@@ -53,10 +51,10 @@ class SettingsView(QTabWidget):
         size_combo.currentTextChanged.connect(self._size_changed)
         layout.addWidget(size_combo)
 
-        mode_chk = QCheckBox("الوضع الداكن")
-        mode_chk.setChecked(StyleManager.dark_mode)
-        mode_chk.stateChanged.connect(self._mode_changed)
-        layout.addWidget(mode_chk)
+        self.mode_btn = QPushButton()
+        self.mode_btn.clicked.connect(self._toggle_mode)
+        self._update_mode_text()
+        layout.addWidget(self.mode_btn)
 
         layout.addStretch()
         return widget
@@ -105,7 +103,12 @@ class SettingsView(QTabWidget):
         StyleManager.font_size = size_map.get(text, 12)
         StyleManager.apply()
 
-    def _mode_changed(self, state: int) -> None:
-        StyleManager.dark_mode = state == Qt.Checked
+    def _toggle_mode(self) -> None:
+        StyleManager.dark_mode = not StyleManager.dark_mode
         ThemeManager.switch_mode(StyleManager.dark_mode)
         StyleManager.apply()
+        self._update_mode_text()
+
+    def _update_mode_text(self) -> None:
+        text = "الوضع الفاتح" if StyleManager.dark_mode else "الوضع الغامق"
+        self.mode_btn.setText(text)
