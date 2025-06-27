@@ -63,18 +63,18 @@ class SettingsView(QTabWidget):
         color = QColorDialog.getColor(QColor(current), self)
         if color.isValid():
             ThemeManager.update(**{which: color.name()})
-            StyleManager.apply()
 
     def _font_changed(self, font: str) -> None:
         if font:
-            ThemeManager.update(font_family=font)
+            StyleManager.font_family = font
             StyleManager.apply()
 
     def _size_changed(self, text: str) -> None:
         size_map = {"كبير": 16, "متوسط": 12, "صغير": 10}
-        ThemeManager.update(font_size=size_map.get(text, 12))
+        StyleManager.font_size = size_map.get(text, 12)
         StyleManager.apply()
 
     def _mode_changed(self, state: int) -> None:
         StyleManager.dark_mode = state == Qt.Checked
+        ThemeManager.switch_mode(StyleManager.dark_mode)
         StyleManager.apply()

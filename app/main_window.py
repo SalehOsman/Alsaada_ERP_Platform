@@ -24,8 +24,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("منصة السعادة")
         self.setLayoutDirection(Qt.RightToLeft)
+        ThemeManager.switch_mode(StyleManager.dark_mode)
         StyleManager.apply()
-        ThemeManager.apply()
 
         central = QWidget()
         self.setCentralWidget(central)
