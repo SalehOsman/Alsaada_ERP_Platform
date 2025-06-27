@@ -45,13 +45,14 @@ SidebarWidget[collapsed="false"] QPushButton {
 }
 
 SidebarWidget QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-                                stop:0 {sidebar_hover_bg},
-                                stop:1 {sidebar_hover_bg_alt});
+    background: transparent;
 }
 
 SidebarWidget QPushButton[active="true"] {
     background: {secondary};
+=======
+    background: transparent;
+
     color: {secondary};
 }
 

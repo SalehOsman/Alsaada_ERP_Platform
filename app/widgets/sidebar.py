@@ -142,9 +142,17 @@ class SidebarWidget(QWidget):
             self.frame.update()
             self.repaint()
             self.frame.repaint()
-        if isinstance(obj, QPushButton) and event.type() == QEvent.Enter:
-            if not self.pinned:
-                self.expand()
+        if isinstance(obj, QPushButton):
+            if event.type() == QEvent.Enter:
+                if not self.pinned:
+                    self.expand()
+                shadow = QGraphicsDropShadowEffect(obj)
+                shadow.setBlurRadius(10)
+                shadow.setOffset(0, 2)
+                shadow.setColor(QColor(0, 0, 0, 80))
+                obj.setGraphicsEffect(shadow)
+            elif event.type() == QEvent.Leave and not obj.property("active"):
+                obj.setGraphicsEffect(None)
         return super().eventFilter(obj, event)
 
     def enterEvent(self, event: QEvent) -> None:
@@ -226,13 +234,11 @@ class SidebarWidget(QWidget):
             is_active = bool(btn.property("active"))
             btn.setGraphicsEffect(None)
 
-
-
             btn.setText("" if collapsed else btn._label)
-            if not collapsed and is_active:
+            if is_active:
                 shadow = QGraphicsDropShadowEffect(btn)
                 shadow.setBlurRadius(14)
-                shadow.setOffset(0, 0)
+                shadow.setOffset(0, 2)
                 shadow.setColor(QColor(0, 0, 0, 120))
                 btn.setGraphicsEffect(shadow)
 
