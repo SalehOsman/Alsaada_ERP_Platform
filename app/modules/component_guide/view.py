@@ -35,6 +35,11 @@ class ComponentGuideView(QScrollArea):
         # Use golden ratio spacing between demo blocks
         layout.setSpacing(int(ThemeManager.spacing * 1.618))
 
+        mode_label = QLabel(
+            f"الوضع الحالي: {'غامق' if ThemeManager.dark_mode else 'فاتح'}"
+        )
+        layout.addWidget(mode_label)
+
         layout.addWidget(self._create_palette_preview())
         layout.addWidget(self._create_buttons())
         layout.addWidget(self._create_inputs())
