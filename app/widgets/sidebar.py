@@ -219,6 +219,7 @@ class SidebarWidget(QWidget):
         for key, btn in self._buttons.items():
             is_active = bool(btn.property("active"))
             btn.setGraphicsEffect(None)
+             codex/refactor-sidebar-styling-and-qss-integration
             btn.setText("" if collapsed else btn._label)
             if not collapsed and is_active:
                 shadow = QGraphicsDropShadowEffect(btn)
@@ -228,6 +229,21 @@ class SidebarWidget(QWidget):
                 btn.setGraphicsEffect(shadow)
 
             icon_color = ThemeManager.palette["secondary"] if (collapsed or is_active) else ThemeManager.palette["primary"]
+            if collapsed:
+                btn.setText("")
+                icon_color = ThemeManager.palette["secondary"]
+            else:
+                if is_active:
+                    btn.setText(btn._label)
+                    icon_color = ThemeManager.palette["secondary"]
+                    shadow = QGraphicsDropShadowEffect(btn)
+                    shadow.setBlurRadius(14)
+                    shadow.setOffset(0, 0)
+                    shadow.setColor(QColor(0, 0, 0, 120))
+                    btn.setGraphicsEffect(shadow)
+                else:
+                    btn.setText(btn._label)
+                    icon_color = ThemeManager.palette["primary"]
             if qta:
                 btn.setIcon(qta.icon(btn._fa_name, color=icon_color))
             else:

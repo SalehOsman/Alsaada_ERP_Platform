@@ -1,0 +1,15 @@
+/* header.qss
+   Basic header widget style
+   Author: OpenAI Codex
+   Date: 2025-06-30
+*/
+
+HeaderWidget {
+    background: {primary};
+    color: {secondary};
+    padding: {spacing}px;
+}
+
+HeaderWidget QLabel {
+    font-weight: bold;
+}

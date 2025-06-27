@@ -1,0 +1,15 @@
+/* table.qss
+   Basic table styles
+   Author: OpenAI Codex
+   Date: 2025-06-30
+*/
+
+QTableWidget {
+    border: 1px solid {secondary_light};
+}
+
+QHeaderView::section {
+    background: {secondary_light};
+    padding: 4px;
+    border: none;
+}
