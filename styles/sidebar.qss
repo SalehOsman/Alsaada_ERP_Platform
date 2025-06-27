@@ -18,6 +18,10 @@ SidebarWidget QPushButton {
     background: transparent;
 }
 
+SidebarWidget QPushButton[collapsed="true"] {
+    text-align: center;
+}
+
 SidebarWidget QPushButton:hover {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
                                 stop:0 {sidebar_hover_bg},
@@ -43,4 +47,5 @@ SidebarWidget QLabel {
     color: {sidebar_text};
     margin-top: {spacing}px;
     margin-bottom: {spacing}px;
+    qproperty-alignment: AlignHCenter;
 }

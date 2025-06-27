@@ -12,8 +12,16 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QLabel,
     QFrame,
+    QSizePolicy,
 )
-from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+    QEvent,
+    QPropertyAnimation,
+    QObject,
+    QSettings,
+)
 from PySide6.QtGui import QIcon
 
 
@@ -35,6 +43,7 @@ class SidebarWidget(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(10)
+        layout.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
 
         self._buttons: dict[str, QPushButton] = {}
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
@@ -53,12 +62,14 @@ class SidebarWidget(QWidget):
         for key, text, icon in sections:
             button = QPushButton("", self)
             button.setIcon(QIcon(str(icon)))
+            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             button.setToolTip(text)
             button.setCheckable(True)
             button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
             button.installEventFilter(self)
             button._label = text  # type: ignore[attr-defined]
             layout.addWidget(button)
+            button.setProperty("collapsed", not self.pinned)
             self._buttons[key] = button
 
         divider = QFrame()
@@ -72,6 +83,7 @@ class SidebarWidget(QWidget):
         self.pin_btn.setChecked(self.pinned)
         self._update_pin_icon()
         self.pin_btn.clicked.connect(self._toggle_pinned)
+        self.pin_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         layout.addWidget(self.pin_btn)
 
         self._animation = QPropertyAnimation(self, b"minimumWidth")
@@ -80,9 +92,15 @@ class SidebarWidget(QWidget):
         if self.pinned:
             for btn in self._buttons.values():
                 btn.setText(btn._label)
+                btn.setProperty("collapsed", False)
+                btn.style().unpolish(btn)
+                btn.style().polish(btn)
         else:
             for btn in self._buttons.values():
                 btn.setText("")
+                btn.setProperty("collapsed", True)
+                btn.style().unpolish(btn)
+                btn.style().polish(btn)
 
     # ------------------------------------------------------------------
     # أحداث التفاعل
@@ -134,6 +152,9 @@ class SidebarWidget(QWidget):
         self._animation.start()
         for btn in self._buttons.values():
             btn.setText(btn._label)
+            btn.setProperty("collapsed", False)
+            btn.style().unpolish(btn)
+            btn.style().polish(btn)
 
     def collapse(self) -> None:
         """إرجاع الشريط الجانبي إلى وضع الأيقونات فقط."""
@@ -146,6 +167,9 @@ class SidebarWidget(QWidget):
         self._animation.start()
         for btn in self._buttons.values():
             btn.setText("")
+            btn.setProperty("collapsed", True)
+            btn.style().unpolish(btn)
+            btn.style().polish(btn)
 
     # ------------------------------------------------------------------
     # إدارة الضغط على الأزرار
