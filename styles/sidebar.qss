@@ -27,7 +27,7 @@ SidebarWidget QPushButton {
 }
 
 SidebarWidget[collapsed="true"] QPushButton {
-    color: {primary};
+    color: {secondary};
     qproperty-iconSize: {icon_size_collapsed}px {icon_size_collapsed}px;
 }
 

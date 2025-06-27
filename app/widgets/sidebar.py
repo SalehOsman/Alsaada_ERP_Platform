@@ -84,6 +84,8 @@ class SidebarWidget(QWidget):
         for i, (key, text, fa_name, icon) in enumerate(sections):
             button = QPushButton("", self)
             button.setLayoutDirection(Qt.RightToLeft)
+            button._fa_name = fa_name  # type: ignore[attr-defined]
+            button._icon_path = icon  # type: ignore[attr-defined]
             if qta:
                 button.setIcon(
                     qta.icon(fa_name, color=ThemeManager.palette["primary"])
@@ -127,6 +129,7 @@ class SidebarWidget(QWidget):
                 btn.setText("")
             self.setProperty("collapsed", True)
         self.style().polish(self)
+        self._update_button_icons()
         self._update_button_shadows()
 
     # ------------------------------------------------------------------
@@ -183,6 +186,7 @@ class SidebarWidget(QWidget):
         self._animation.start()
         self.setProperty("collapsed", False)
         self.style().polish(self)
+        self._update_button_icons()
         for btn in self._buttons.values():
             btn.setText(btn._label)
         self._update_button_shadows()
@@ -198,6 +202,7 @@ class SidebarWidget(QWidget):
         self._animation.start()
         self.setProperty("collapsed", True)
         self.style().polish(self)
+        self._update_button_icons()
         for btn in self._buttons.values():
             btn.setText("")
         self._update_button_shadows()
@@ -218,6 +223,16 @@ class SidebarWidget(QWidget):
         """Remove shadow effect from a button."""
         if button.graphicsEffect():
             button.setGraphicsEffect(None)
+
+    def _update_button_icons(self) -> None:
+        """Update icon colors based on collapsed state."""
+        collapsed = self.property("collapsed")
+        color_key = "secondary" if collapsed else "primary"
+        for btn in self._buttons.values():
+            if qta:
+                btn.setIcon(qta.icon(btn._fa_name, color=ThemeManager.palette[color_key]))
+            else:
+                btn.setIcon(QIcon(str(btn._icon_path)))
 
     def _update_button_shadows(self) -> None:
         """Update shadows based on active state and sidebar mode."""
