@@ -51,7 +51,7 @@ SidebarWidget QPushButton:hover {
 }
 
 SidebarWidget QPushButton[active="true"] {
-    background: {primary};
+    background: {secondary};
     color: {secondary};
 }
 
