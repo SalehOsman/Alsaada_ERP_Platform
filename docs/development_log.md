@@ -131,3 +131,26 @@
 **جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
 
 ---
+
+## 2025-06-28
+
+---
+
+**تطوير شامل للشريط الجانبي**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - دعم أيقونات SVG حديثة، زر تثبيت، وحفظ حالة التثبيت مع تحسين التفاعل.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\style_manager.py**
+    - ربط تطبيق الوضع الليلي بمدير الثيم لتحديث الأنماط تلقائيًا.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\theme_manager.py**
+    - إضافة لوحات ألوان للوضعين الفاتح والداكن ولون Accent موحد.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\modules\settings\view.py**
+    - تحديث آلية تبديل الوضع الداكن لتعمل مع التعديلات الجديدة.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - تأثيرات Hover وActive بتدرج لوني وفاصل مرئي للأقسام.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons**
+    - إضافة مجموعة أيقونات SVG موحّدة.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---

@@ -1,9 +1,8 @@
 /* sidebar.qss
-   الغرض: تنسيقات الشريط الجانبي المتجاوب
+   الغرض: تنسيقات الشريط الجانبي المتجاوب بتأثيرات عصرية
    المؤلف: صالح عثمان
    تاريخ التعديل: 2025-06-28
 */
-
 
 SidebarWidget {
     background: {sidebar_bg};
@@ -20,14 +19,24 @@ SidebarWidget QPushButton {
 }
 
 SidebarWidget QPushButton:hover {
-    background: {sidebar_hover_bg};
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 {sidebar_hover_bg},
+                                stop:1 {sidebar_hover_bg_alt});
     color: {sidebar_hover_text};
 }
 
 SidebarWidget QPushButton:checked,
 SidebarWidget QPushButton:pressed {
-    background: {sidebar_active_bg};
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 {accent_light},
+                                stop:1 {accent});
     color: {sidebar_active_text};
+}
+
+SidebarWidget QFrame {
+    margin-top: {spacing}px;
+    margin-bottom: {spacing}px;
+    border-top: 1px solid {secondary_light};
 }
 
 SidebarWidget QLabel {

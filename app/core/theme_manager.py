@@ -6,10 +6,9 @@ from PySide6.QtWidgets import QApplication
 
 
 class ThemeManager:
-    """Central manager for theme colors and styling."""
+    """مدير الثيم المركزي للألوان والتنسيقات."""
 
-    # Base palette
-    palette: dict[str, str] = {
+    light_palette: dict[str, str] = {
         "primary": "#f47824",
         "primary_light": "#ffa96b",
         "primary_dark": "#b35c1c",
@@ -21,14 +20,41 @@ class ThemeManager:
         "success": "#28a745",
         "warning": "#ffc107",
         "error": "#dc3545",
-        # Sidebar specific colors
+        "sidebar_bg": "#f7f7f7",
+        "sidebar_text": "#333333",
+        "sidebar_hover_bg": "#e0e0e0",
+        "sidebar_hover_bg_alt": "#ffffff",
+        "sidebar_hover_text": "#000000",
+        "sidebar_active_bg": "#f47824",
+        "sidebar_active_text": "#ffffff",
+        "accent": "#f47824",
+        "accent_light": "#ffa96b",
+    }
+
+    dark_palette: dict[str, str] = {
+        "primary": "#f47824",
+        "primary_light": "#ffa96b",
+        "primary_dark": "#b35c1c",
+        "primary_disabled": "#fbd3ba",
+        "secondary": "#dddddd",
+        "secondary_light": "#bbbbbb",
+        "secondary_dark": "#888888",
+        "secondary_disabled": "#555555",
+        "success": "#28a745",
+        "warning": "#ffc107",
+        "error": "#dc3545",
         "sidebar_bg": "#2c2c2c",
         "sidebar_text": "#f0f0f0",
         "sidebar_hover_bg": "#444444",
+        "sidebar_hover_bg_alt": "#333333",
         "sidebar_hover_text": "#ffffff",
         "sidebar_active_bg": "#f47824",
         "sidebar_active_text": "#ffffff",
+        "accent": "#f47824",
+        "accent_light": "#ffa96b",
     }
+
+    palette: dict[str, str] = light_palette.copy()
 
     font_family: str = "Arial"
     font_size: int = 12
@@ -37,9 +63,16 @@ class ThemeManager:
     radius_medium: int = 8
     spacing: int = 8
 
+    dark_mode: bool = False
+
+    @classmethod
+    def switch_mode(cls, dark: bool) -> None:
+        cls.dark_mode = dark
+        cls.palette = cls.dark_palette.copy() if dark else cls.light_palette.copy()
+        cls.apply()
+
     @classmethod
     def apply(cls, app: QApplication | None = None) -> None:
-        """Apply current palette and style sheets to the application."""
         app = app or QApplication.instance()
         if not app:
             return
@@ -60,8 +93,6 @@ class ThemeManager:
                 "radius_medium": cls.radius_medium,
                 "spacing": cls.spacing,
             }
-            # Replace placeholders like {primary} without requiring escaping
-            # of CSS braces used in the QSS files.
             pattern = re.compile(r"{([a-zA-Z0-9_]+)}")
 
             def replace(match: re.Match) -> str:
@@ -72,7 +103,6 @@ class ThemeManager:
 
     @classmethod
     def update(cls, **kwargs: str) -> None:
-        """Update palette values then reapply styles."""
         for key, value in kwargs.items():
             if key in cls.palette:
                 cls.palette[key] = value
