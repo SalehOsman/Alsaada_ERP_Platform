@@ -1,7 +1,7 @@
 /* sidebar.qss
    الغرض: تنسيقات الشريط الجانبي المتجاوب بتأثيرات عصرية مع ألوان ديناميكية للحالات المختلفة
    المؤلف: صالح عثمان
-   تاريخ التعديل: 2025-06-30
+   تاريخ التعديل: 2025-07-01
 */
 
 SidebarWidget {
@@ -21,17 +21,27 @@ SidebarWidget QPushButton {
     padding: {spacing}px;
     border-radius: {radius_small}px;
     background: transparent;
-    text-align: center;
+    text-align: right;
+    padding-right: 20px;
+    font-weight: bold;
+    font-size: {sidebar_font_size}px;
+    border-bottom: 1px solid {secondary_light};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 
 SidebarWidget[collapsed="true"] QPushButton {
     color: {secondary};
+    text-align: center;
+    padding-right: 0px;
+    border-bottom: 1px solid {primary_light};
     qproperty-iconSize: {icon_size_collapsed}px {icon_size_collapsed}px;
 }
 
 SidebarWidget[collapsed="false"] QPushButton {
     color: {primary};
+    text-align: right;
+    padding-right: 20px;
+    border-bottom: 1px solid {secondary_light};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 

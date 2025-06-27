@@ -196,3 +196,20 @@
 **جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
 
 ---
+
+## 2025-07-01
+
+---
+
+**تحسين واجهة الشريط الجانبي والألوان**
+
+- **D:\\Alsaada-ERP\\Alsaada_ERP_Platform\\app\\core\\theme_manager.py**
+    - إضافة متغير sidebar_font_size وضبط أحجام الأيقونات الافتراضية.
+- **D:\\Alsaada-ERP\\Alsaada_ERP_Platform\\styles\\sidebar.qss**
+    - تحديث محاذاة النصوص والأيقونات وتكبير الخط مع إضافة فواصل بين الأقسام.
+- **D:\\Alsaada-ERP\\Alsaada_ERP_Platform\\app\\widgets\\sidebar.py**
+    - تحديث تاريخ التعديل.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
