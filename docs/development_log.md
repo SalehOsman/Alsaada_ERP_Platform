@@ -154,3 +154,28 @@
 **جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
 
 ---
+
+## 2025-06-29
+
+---
+
+**تحسينات واجهة الشريط الجانبي**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - إضافة خاصية collapsed للتبديل بين الألوان تلقائيًا وتحديث التوسعة مع تحريك العرض.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
+    - تحديث الأنماط لتغيير الألوان حسب حالة الشريط وتهيئة تأثيرات hover/active.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons\settings.svg**
+    - استبدال الأيقونة بأيقونة ترس حديثة.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons\pin.svg**
+    - استبدال أيقونة التثبيت بدبوس مكتبي.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons\unpin.svg**
+    - استبدال أيقونة الفك بدبوس مشطوب.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons\equipment.svg**
+    - استبدال الأيقونة بأيقونة مفتاح إنجليزي.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\icons\finance.svg**
+    - استبدال الأيقونة برمز حقيبة نقود.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
