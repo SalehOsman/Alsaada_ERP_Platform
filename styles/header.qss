@@ -8,8 +8,15 @@ HeaderWidget {
     background: {primary};
     color: {secondary};
     padding: {spacing}px;
+    min-height: 72px;
 }
 
 HeaderWidget QLabel {
     font-weight: bold;
+}
+
+HeaderWidget #logoFrame {
+    background: white;
+    border: 1px solid {secondary};
+    border-radius: {radius_small}px;
 }
