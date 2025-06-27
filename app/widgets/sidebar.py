@@ -89,6 +89,7 @@ class SidebarWidget(QWidget):
                 button.setIcon(QIcon(str(icon)))
             button.setToolTip(text)
             button.setCheckable(True)
+            button.setChecked(key == "dashboard")
             button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
             button.installEventFilter(self)
             button._label = text  # type: ignore[attr-defined]

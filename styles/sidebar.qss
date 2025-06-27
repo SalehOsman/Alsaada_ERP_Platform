@@ -6,7 +6,7 @@
 
 SidebarWidget {
     min-width: 60px;
-    border-right: 1px solid {secondary_light};
+    border-right: 1px solid {primary};
 }
 
 SidebarWidget[collapsed="true"] {
@@ -18,11 +18,12 @@ SidebarWidget[collapsed="false"] {
 }
 
 SidebarWidget QPushButton {
-    padding: {spacing}px;
+    padding: {spacing}px 16px {spacing}px {spacing}px;
     border-radius: {radius_small}px;
     background: transparent;
-    text-align: center;
+    text-align: right;
     font-weight: bold;
+    border-bottom: 1px solid {primary};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 
@@ -51,13 +52,14 @@ SidebarWidget QPushButton:pressed {
 SidebarWidget QFrame {
     margin-top: {spacing}px;
     margin-bottom: {spacing}px;
-    border-top: 1px solid {secondary_light};
+    border-top: 1px solid {primary};
 }
 
 SidebarWidget QLabel {
     margin-top: {spacing}px;
     margin-bottom: {spacing}px;
     font-weight: bold;
+    qproperty-alignment: AlignRight;
 }
 
 SidebarWidget[collapsed="false"] QLabel {
