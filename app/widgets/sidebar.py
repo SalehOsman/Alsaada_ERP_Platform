@@ -146,12 +146,11 @@ class SidebarWidget(QWidget):
             if event.type() == QEvent.Enter:
                 if not self.pinned:
                     self.expand()
-                shadow = QGraphicsDropShadowEffect(obj)
-                shadow.setBlurRadius(10)
-                shadow.setOffset(0, 2)
-                shadow.setColor(QColor(0, 0, 0, 80))
-                obj.setGraphicsEffect(shadow)
+                obj.setProperty("hovered", True)
+                obj.style().polish(obj)
             elif event.type() == QEvent.Leave and not obj.property("active"):
+                obj.setProperty("hovered", False)
+                obj.style().polish(obj)
                 obj.setGraphicsEffect(None)
         return super().eventFilter(obj, event)
 
@@ -233,15 +232,9 @@ class SidebarWidget(QWidget):
         for key, btn in self._buttons.items():
             is_active = bool(btn.property("active"))
             btn.setGraphicsEffect(None)
-
+            btn.setProperty("hovered", is_active)
             btn.setText("" if collapsed else btn._label)
-            if is_active:
-                shadow = QGraphicsDropShadowEffect(btn)
-                shadow.setBlurRadius(14)
-                shadow.setOffset(0, 2)
-                shadow.setColor(QColor(0, 0, 0, 120))
-                btn.setGraphicsEffect(shadow)
-
+            
             icon_color = ThemeManager.palette["secondary"]
 
             if qta:

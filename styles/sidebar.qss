@@ -48,9 +48,16 @@ SidebarWidget QPushButton:hover {
     background: transparent;
 }
 
+SidebarWidget QPushButton[hovered="true"] {
+    font-size: 14px;
+    text-align: center;
+}
+
 SidebarWidget QPushButton[active="true"] {
     background: transparent;
     color: {secondary};
+    font-size: 14px;
+    text-align: center;
 }
 
 /* توسيط العنصر الفعّال عند فتح القائمة لكل من الوضعين الغامق والفاتح */
