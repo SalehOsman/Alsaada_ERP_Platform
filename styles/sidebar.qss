@@ -18,20 +18,24 @@ SidebarWidget[collapsed="false"] {
 }
 
 SidebarWidget QPushButton {
-    padding: {spacing}px;
+    border: none;
     border-radius: {radius_small}px;
     background: transparent;
-    text-align: center;
     font-weight: bold;
-    qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 
 SidebarWidget[collapsed="true"] QPushButton {
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
     color: {secondary};
     qproperty-iconSize: {icon_size_collapsed}px {icon_size_collapsed}px;
 }
 
 SidebarWidget[collapsed="false"] QPushButton {
+    padding-left: {spacing}px;
+    padding-right: {spacing}px;
+    text-align: left;
     color: {primary};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
@@ -42,11 +46,11 @@ SidebarWidget QPushButton:hover {
                                 stop:1 {sidebar_hover_bg_alt});
 }
 
-SidebarWidget QPushButton:checked,
-SidebarWidget QPushButton:pressed {
+SidebarWidget QPushButton[active="true"] {
     background: {primary};
     color: {secondary};
 }
+
 
 SidebarWidget QFrame {
     margin-top: {spacing}px;
@@ -60,6 +64,18 @@ SidebarWidget[collapsed="false"] QFrame {
 
 SidebarWidget[collapsed="true"] QFrame {
     border-color: {secondary};
+}
+
+SidebarWidget QFrame#SidebarMainFrame {
+    border: none;
+}
+
+SidebarWidget[collapsed="true"] QFrame#SidebarMainFrame {
+    background: {primary};
+}
+
+SidebarWidget[collapsed="false"] QFrame#SidebarMainFrame {
+    background: {secondary};
 }
 
 SidebarWidget QLabel {

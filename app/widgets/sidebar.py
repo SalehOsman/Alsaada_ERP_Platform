@@ -18,6 +18,8 @@ except Exception:
     qta = None
 
 class SidebarWidget(QWidget):
+    """Collapsible sidebar with navigation buttons."""
+
     navigate = Signal(str)
     PIN_KEY = "sidebar_pinned"
 
@@ -89,6 +91,8 @@ class SidebarWidget(QWidget):
             else:
                 button.setIcon(QIcon(str(icon)))
             button.setIconSize(QSize(self._icon_size_collapsed, self._icon_size_collapsed))
+            button.setProperty("active", key == "dashboard")
+            button.setChecked(key == "dashboard")
             self._buttons[key] = button
             self._section_keys.append(key)
             layout.addWidget(button)
@@ -205,73 +209,38 @@ class SidebarWidget(QWidget):
         self.frame.repaint()
 
     def _refresh_sidebar_style(self, collapsed: bool):
-        if not collapsed:
-            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["secondary"]))
-        else:
-            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["primary"]))
+        """Update frame styling and shadow after collapsing or expanding."""
         self.shadow.setColor(QColor(0, 0, 0, 130))
         self.style().polish(self)
         self.frame.update()
 
     def _update_selection(self):
+        """Refresh button states and icons based on selection."""
         collapsed = self.property("collapsed")
-        if not any(btn.isChecked() for btn in self._buttons.values()):
-            self._buttons[self._active_key].setChecked(True)
+        if not any(btn.property("active") for btn in self._buttons.values()):
+            self._buttons[self._active_key].setProperty("active", True)
 
         for key, btn in self._buttons.items():
-            is_active = btn.isChecked()
+            is_active = bool(btn.property("active"))
             btn.setGraphicsEffect(None)
-            if collapsed:
-                btn.setText("")
-                icon_color = ThemeManager.palette["secondary"]
-                btn.setStyleSheet(
-                    "background: transparent; border: none; margin: 0; padding: 0;"
-                    f"qproperty-iconSize: {self._icon_size_collapsed}px {self._icon_size_collapsed}px;"
-                )
-            else:
-                if is_active:
-                    btn.setText(btn._label)
-                    icon_color = ThemeManager.palette["secondary"]
-                    btn.setStyleSheet(
-                        f"""
-                        background: {ThemeManager.palette['primary']};
-                        color: {ThemeManager.palette['secondary']};
-                        border: none;
-                        text-align: center;
-                        font-weight: bold;
-                        padding-left: {self._padding_lr}px;
-                        padding-right: {self._padding_lr}px;
-                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
-                        """
-                    )
-                    shadow = QGraphicsDropShadowEffect(btn)
-                    shadow.setBlurRadius(14)
-                    shadow.setOffset(0, 0)
-                    shadow.setColor(QColor(0, 0, 0, 120))
-                    btn.setGraphicsEffect(shadow)
-                else:
-                    btn.setText(btn._label)
-                    icon_color = ThemeManager.palette["primary"]
-                    btn.setStyleSheet(
-                        f"""
-                        background: transparent;
-                        color: {ThemeManager.palette['primary']};
-                        border: none;
-                        text-align: left;
-                        font-weight: bold;
-                        padding-left: {self._padding_lr}px;
-                        padding-right: {self._padding_lr}px;
-                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
-                        """
-                    )
+            btn.setText("" if collapsed else btn._label)
+            if not collapsed and is_active:
+                shadow = QGraphicsDropShadowEffect(btn)
+                shadow.setBlurRadius(14)
+                shadow.setOffset(0, 0)
+                shadow.setColor(QColor(0, 0, 0, 120))
+                btn.setGraphicsEffect(shadow)
+
+            icon_color = ThemeManager.palette["secondary"] if (collapsed or is_active) else ThemeManager.palette["primary"]
             if qta:
                 btn.setIcon(qta.icon(btn._fa_name, color=icon_color))
             else:
                 btn.setIcon(QIcon(str(btn._icon_path)))
             btn.setIconSize(QSize(
                 self._icon_size_collapsed if collapsed else self._icon_size_expanded,
-                self._icon_size_collapsed if collapsed else self._icon_size_expanded
+                self._icon_size_collapsed if collapsed else self._icon_size_expanded,
             ))
+            btn.style().polish(btn)
 
         # زر الدبوس – اللون الأساسي في جميع الحالات
         if qta:
@@ -282,7 +251,9 @@ class SidebarWidget(QWidget):
 
     def _on_button_clicked(self, key: str) -> None:
         for k, b in self._buttons.items():
-            b.setChecked(k == key)
+            active = k == key
+            b.setChecked(active)
+            b.setProperty("active", active)
         self._active_key = key
         self._update_selection()
         self.navigate.emit(key)
