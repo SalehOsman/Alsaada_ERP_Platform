@@ -1,25 +1,35 @@
 # sidebar.py
-# الغرض: ودجت الشريط الجانبي المتجاوب مع توسع تلقائي عند المرور بالماوس
+# الغرض: ودجت الشريط الجانبي المتفاعل مع دعم التثبيت والوضع الليلي
 # المؤلف: صالح عثمان
 # تاريخ التعديل: 2025-06-28
 
 from __future__ import annotations
 
-from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QStyle
-from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject
-
+from pathlib import Path
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QVBoxLayout,
+    QLabel,
+    QFrame,
+)
+from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings
+from PySide6.QtGui import QIcon
 
 
 class SidebarWidget(QWidget):
-    """ودجت شريط جانبي يظهر أيقونات فقط ويتوسع عند المرور بالماوس."""
+    """ودجت شريط جانبي يظهر أيقونات فقط ويتوسع عند التفاعل."""
 
     navigate = Signal(str)
+    PIN_KEY = "sidebar_pinned"
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._collapsed_width = 60
         self._expanded_width = 200
-        self.setFixedWidth(self._collapsed_width)
+        self.settings = QSettings("AlsaadaERP", "AlsaadaERP")
+        self.pinned = self.settings.value(self.PIN_KEY, False, bool)
+        self.setFixedWidth(self._expanded_width if self.pinned else self._collapsed_width)
         self.setMouseTracking(True)
 
         layout = QVBoxLayout(self)
@@ -27,49 +37,88 @@ class SidebarWidget(QWidget):
         layout.setSpacing(10)
 
         self._buttons: dict[str, QPushButton] = {}
+        icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
         sections = [
-            ("dashboard", "الرئيسية", QStyle.SP_DesktopIcon),
-            ("component_guide", "دليل المكونات", QStyle.SP_FileDialogListView),
-            ("employees", "العاملون", QStyle.SP_ComputerIcon),
-            ("finance", "المالية", QStyle.SP_DriveHDIcon),
-            ("equipment", "المعدات", QStyle.SP_DriveNetIcon),
-            ("projects", "المشاريع", QStyle.SP_DirIcon),
-            ("daily_ops", "العمليات اليومية", QStyle.SP_FileDialogDetailedView),
-            ("notes", "الملاحظات", QStyle.SP_FileDialogInfoView),
-            ("settings", "الإعدادات", QStyle.SP_FileDialogDetailedView),
+            ("dashboard", "الرئيسية", icon_dir / "dashboard.svg"),
+            ("component_guide", "دليل المكونات", icon_dir / "guide.svg"),
+            ("employees", "العاملون", icon_dir / "employees.svg"),
+            ("finance", "المالية", icon_dir / "finance.svg"),
+            ("equipment", "المعدات", icon_dir / "equipment.svg"),
+            ("projects", "المشاريع", icon_dir / "projects.svg"),
+            ("daily_ops", "العمليات اليومية", icon_dir / "daily_ops.svg"),
+            ("notes", "الملاحظات", icon_dir / "notes.svg"),
+            ("settings", "الإعدادات", icon_dir / "settings.svg"),
         ]
 
         for key, text, icon in sections:
             button = QPushButton("", self)
-            button.setIcon(self.style().standardIcon(icon))
+            button.setIcon(QIcon(str(icon)))
             button.setToolTip(text)
-            button.clicked.connect(lambda _=False, k=key: self.navigate.emit(k))
+            button.setCheckable(True)
+            button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
             button.installEventFilter(self)
             button._label = text  # type: ignore[attr-defined]
             layout.addWidget(button)
             self._buttons[key] = button
 
+        divider = QFrame()
+        divider.setFrameShape(QFrame.HLine)
+        layout.addWidget(divider)
+        layout.addWidget(QLabel("اختصارات"))
         layout.addStretch()
-        layout.addWidget(QLabel("إجراءات سريعة"))
+
+        self.pin_btn = QPushButton("", self)
+        self.pin_btn.setCheckable(True)
+        self.pin_btn.setChecked(self.pinned)
+        self._update_pin_icon()
+        self.pin_btn.clicked.connect(self._toggle_pinned)
+        layout.addWidget(self.pin_btn)
 
         self._animation = QPropertyAnimation(self, b"minimumWidth")
-        self._animation.setDuration(150)
+        self._animation.setDuration(200)
+
+        if self.pinned:
+            for btn in self._buttons.values():
+                btn.setText(btn._label)
+        else:
+            for btn in self._buttons.values():
+                btn.setText("")
 
     # ------------------------------------------------------------------
-    # الأحداث
+    # أحداث التفاعل
     # ------------------------------------------------------------------
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:  # type: ignore[name-defined]
         if isinstance(obj, QPushButton) and event.type() == QEvent.Enter:
-            self.expand()
+            if not self.pinned:
+                self.expand()
         return super().eventFilter(obj, event)
 
     def enterEvent(self, event: QEvent) -> None:
-        self.expand()
+        if not self.pinned:
+            self.expand()
         super().enterEvent(event)
 
     def leaveEvent(self, event: QEvent) -> None:
-        self.collapse()
+        if not self.pinned:
+            self.collapse()
         super().leaveEvent(event)
+
+    # ------------------------------------------------------------------
+    # التحكم في التثبيت
+    # ------------------------------------------------------------------
+    def _toggle_pinned(self) -> None:
+        self.pinned = self.pin_btn.isChecked()
+        self._update_pin_icon()
+        self.settings.setValue(self.PIN_KEY, self.pinned)
+        if self.pinned:
+            self.expand()
+        else:
+            self.collapse()
+
+    def _update_pin_icon(self) -> None:
+        icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
+        name = "pin.svg" if self.pinned else "unpin.svg"
+        self.pin_btn.setIcon(QIcon(str(icon_dir / name)))
 
     # ------------------------------------------------------------------
     # التحويل بين الوضعين
@@ -97,3 +146,11 @@ class SidebarWidget(QWidget):
         self._animation.start()
         for btn in self._buttons.values():
             btn.setText("")
+
+    # ------------------------------------------------------------------
+    # إدارة الضغط على الأزرار
+    # ------------------------------------------------------------------
+    def _on_button_clicked(self, key: str) -> None:
+        for k, b in self._buttons.items():
+            b.setChecked(k == key)
+        self.navigate.emit(key)

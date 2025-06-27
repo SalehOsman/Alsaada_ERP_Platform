@@ -2,12 +2,12 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QPalette, QColor, QFont
 from PySide6.QtCore import Qt
 
+from .theme_manager import ThemeManager
+
 
 class StyleManager:
-    """Simple style manager for colors, fonts and theme."""
+    """إدارة الخطوط وتطبيق الوضع الليلي."""
 
-    primary_color: str = "#f47824"
-    secondary_color: str = "#333333"
     font_family: str = "Arial"
     font_size: int = 12
     dark_mode: bool = False
@@ -25,12 +25,10 @@ class StyleManager:
             palette.setColor(QPalette.Window, Qt.white)
             palette.setColor(QPalette.WindowText, Qt.black)
 
-        palette.setColor(QPalette.Button, QColor(cls.primary_color))
-        palette.setColor(QPalette.ButtonText, Qt.white)
         app.setPalette(palette)
 
         font = QFont(cls.font_family, cls.font_size)
         app.setFont(font)
-        app.setStyleSheet(
-            f"QWidget{{font-family:'{cls.font_family}';font-size:{cls.font_size}pt;}}"
-        )
+        ThemeManager.font_family = cls.font_family
+        ThemeManager.font_size = cls.font_size
+        ThemeManager.switch_mode(cls.dark_mode)

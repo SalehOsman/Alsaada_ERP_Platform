@@ -19,7 +19,6 @@ class SettingsView(QTabWidget):
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
-
         self.addTab(self._create_appearance_tab(), "المظهر")
         self.addTab(self._create_tab("محتوى تبويب 2 الإعدادات"), "تبويب 2 الإعدادات")
 
