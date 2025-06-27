@@ -117,9 +117,6 @@
 ## 2025-06-28
 
 ---
-
-=======
-
 **تحديث سلوك وتصميم الشريط الجانبي**
 
 - **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
