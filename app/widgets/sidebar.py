@@ -18,6 +18,8 @@ except Exception:
     qta = None
 
 class SidebarWidget(QWidget):
+    """Collapsible sidebar with navigation buttons."""
+
     navigate = Signal(str)
     PIN_KEY = "sidebar_pinned"
 
