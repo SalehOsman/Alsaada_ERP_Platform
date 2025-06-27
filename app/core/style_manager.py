@@ -10,7 +10,7 @@ class StyleManager:
 
     font_family: str = "Arial"
     font_size: int = 12
-    dark_mode: bool = False
+    dark_mode: bool = True
 
     @classmethod
     def apply(cls, app: QApplication | None = None) -> None:
