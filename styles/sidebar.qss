@@ -10,11 +10,13 @@ SidebarWidget {
 }
 
 SidebarWidget[collapsed="true"] {
-    background: {primary};
+    /* collapsed sidebar uses the primary color */
+    background-color: {primary};
 }
 
 SidebarWidget[collapsed="false"] {
-    background: {secondary};
+    /* expanded sidebar retains the secondary background */
+    background-color: {secondary};
 }
 
 SidebarWidget QPushButton {
