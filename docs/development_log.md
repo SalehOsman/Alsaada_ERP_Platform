@@ -300,6 +300,12 @@
 
 ---
 
+
+**تعديل خلفية العنصر الفعّال في الشريط الجانبي**
+
+- **D:\\Alsaada-ERP\\Alsaada_ERP_Platform\\styles\\sidebar.qss**
+    - جعل خلفية الزر النشط تستعمل اللون الثانوي في وضعي الفتح والإغلاق.
+=======
 **تحديث تأثيرات الشريط الجانبي وامتداده**
 
 - **D:\Alsaada-ERP\Alsaada_ERP_Platform\styles\sidebar.qss**
