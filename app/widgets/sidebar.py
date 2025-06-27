@@ -227,7 +227,6 @@ class SidebarWidget(QWidget):
             btn.setGraphicsEffect(None)
 
 
-             codex/refactor-sidebar-styling-and-qss-integration
 
             btn.setText("" if collapsed else btn._label)
             if not collapsed and is_active:
