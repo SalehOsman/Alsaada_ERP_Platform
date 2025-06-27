@@ -1,36 +1,47 @@
 /* sidebar.qss
-   الغرض: تنسيقات الشريط الجانبي المتجاوب بتأثيرات عصرية
+   الغرض: تنسيقات الشريط الجانبي المتجاوب بتأثيرات عصرية مع ألوان ديناميكية للحالات المختلفة
    المؤلف: صالح عثمان
-   تاريخ التعديل: 2025-06-28
+   تاريخ التعديل: 2025-06-29
 */
 
 SidebarWidget {
-    background: {sidebar_bg};
     min-width: 60px;
     border-right: 1px solid {secondary_light};
 }
 
+SidebarWidget[collapsed="true"] {
+    background: {primary};
+}
+
+SidebarWidget[collapsed="false"] {
+    background: {secondary};
+}
+
 SidebarWidget QPushButton {
-    color: {sidebar_text};
-    text-align: right;
     padding: {spacing}px;
     border-radius: {radius_small}px;
     background: transparent;
+    text-align: center;
+}
+
+SidebarWidget[collapsed="true"] QPushButton {
+    color: {secondary};
+}
+
+SidebarWidget[collapsed="false"] QPushButton {
+    color: {primary};
 }
 
 SidebarWidget QPushButton:hover {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
                                 stop:0 {sidebar_hover_bg},
                                 stop:1 {sidebar_hover_bg_alt});
-    color: {sidebar_hover_text};
 }
 
 SidebarWidget QPushButton:checked,
 SidebarWidget QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-                                stop:0 {accent_light},
-                                stop:1 {accent});
-    color: {sidebar_active_text};
+    background: {primary};
+    color: {secondary};
 }
 
 SidebarWidget QFrame {

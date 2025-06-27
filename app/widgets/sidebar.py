@@ -1,7 +1,7 @@
 # sidebar.py
-# الغرض: ودجت الشريط الجانبي المتفاعل مع دعم التثبيت والوضع الليلي
+# الغرض: ودجت الشريط الجانبي المتفاعل مع دعم التثبيت والوضع الليلي وتغيير الألوان ديناميكياً
 # المؤلف: صالح عثمان
-# تاريخ التعديل: 2025-06-28
+# تاريخ التعديل: 2025-06-29
 
 from __future__ import annotations
 
@@ -30,6 +30,7 @@ class SidebarWidget(QWidget):
         self.settings = QSettings("AlsaadaERP", "AlsaadaERP")
         self.pinned = self.settings.value(self.PIN_KEY, False, bool)
         self.setFixedWidth(self._expanded_width if self.pinned else self._collapsed_width)
+        self.setProperty("collapsed", not self.pinned)
         self.setMouseTracking(True)
 
         layout = QVBoxLayout(self)
@@ -52,6 +53,7 @@ class SidebarWidget(QWidget):
 
         for key, text, icon in sections:
             button = QPushButton("", self)
+            button.setLayoutDirection(Qt.RightToLeft)
             button.setIcon(QIcon(str(icon)))
             button.setToolTip(text)
             button.setCheckable(True)
@@ -80,9 +82,12 @@ class SidebarWidget(QWidget):
         if self.pinned:
             for btn in self._buttons.values():
                 btn.setText(btn._label)
+            self.setProperty("collapsed", False)
         else:
             for btn in self._buttons.values():
                 btn.setText("")
+            self.setProperty("collapsed", True)
+        self.style().polish(self)
 
     # ------------------------------------------------------------------
     # أحداث التفاعل
@@ -132,6 +137,8 @@ class SidebarWidget(QWidget):
         self._animation.setStartValue(self.width())
         self._animation.setEndValue(self._expanded_width)
         self._animation.start()
+        self.setProperty("collapsed", False)
+        self.style().polish(self)
         for btn in self._buttons.values():
             btn.setText(btn._label)
 
@@ -144,6 +151,8 @@ class SidebarWidget(QWidget):
         self._animation.setStartValue(self.width())
         self._animation.setEndValue(self._collapsed_width)
         self._animation.start()
+        self.setProperty("collapsed", True)
+        self.style().polish(self)
         for btn in self._buttons.values():
             btn.setText("")
 
