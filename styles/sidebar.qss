@@ -7,6 +7,8 @@
 SidebarWidget {
     min-width: 60px;
     border-right: 1px solid {secondary_light};
+    /* unified background for all states */
+    background-color: {primary};
 }
 
 SidebarWidget[collapsed="true"] {
@@ -15,8 +17,8 @@ SidebarWidget[collapsed="true"] {
 }
 
 SidebarWidget[collapsed="false"] {
-    /* expanded sidebar retains the secondary background */
-    background-color: {secondary};
+    /* expanded sidebar also uses the primary color */
+    background-color: {primary};
 }
 
 SidebarWidget QPushButton {
@@ -38,7 +40,7 @@ SidebarWidget[collapsed="false"] QPushButton {
     padding-left: {spacing}px;
     padding-right: {spacing}px;
     text-align: left;
-    color: {primary};
+    color: {secondary};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
 }
 
@@ -84,7 +86,7 @@ SidebarWidget[collapsed="true"] QFrame#SidebarMainFrame {
 }
 
 SidebarWidget[collapsed="false"] QFrame#SidebarMainFrame {
-    background: {secondary};
+    background: {primary};
 }
 
 SidebarWidget QLabel {
@@ -94,5 +96,5 @@ SidebarWidget QLabel {
 }
 
 SidebarWidget[collapsed="false"] QLabel {
-    color: {primary};
+    color: {secondary};
 }

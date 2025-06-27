@@ -85,9 +85,9 @@ class SidebarWidget(QWidget):
             button.setFont(QFont("Cairo", 12))
             button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
-            # عند التهيئة: كل الأيقونات باللون الأساسي
+            # عند التهيئة: كل الأيقونات باللون الثانوي
             if qta:
-                button.setIcon(qta.icon(fa_name, color=ThemeManager.palette["primary"]))
+                button.setIcon(qta.icon(fa_name, color=ThemeManager.palette["secondary"]))
             else:
                 button.setIcon(QIcon(str(icon)))
             button.setIconSize(QSize(self._icon_size_collapsed, self._icon_size_collapsed))
@@ -105,9 +105,9 @@ class SidebarWidget(QWidget):
         self.pin_btn.setMaximumHeight(52)
         self.pin_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.pin_btn.clicked.connect(self._toggle_pinned)
-        # لون أيقونة الدبوس الأساسي فقط (حتى التفاعل)
+        # لون أيقونة الدبوس باللون الثانوي
         if qta:
-            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["primary"]))
+            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["secondary"]))
         else:
             icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
             self.pin_btn.setIcon(QIcon(str(icon_dir / "pin.svg")))
@@ -168,7 +168,7 @@ class SidebarWidget(QWidget):
 
     def _update_pin_icon(self) -> None:
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
-        fa_color = ThemeManager.palette["primary"]
+        fa_color = ThemeManager.palette["secondary"]
         name = "unpin.svg" if self.pinned else "pin.svg"
         if qta:
             fa_name = "fa5s.times" if self.pinned else "fa5s.thumbtack"
@@ -236,24 +236,7 @@ class SidebarWidget(QWidget):
                 shadow.setColor(QColor(0, 0, 0, 120))
                 btn.setGraphicsEffect(shadow)
 
-            icon_color = ThemeManager.palette["secondary"] if (collapsed or is_active) else ThemeManager.palette["primary"]
-
-
-            if collapsed:
-                btn.setText("")
-                icon_color = ThemeManager.palette["secondary"]
-            else:
-                if is_active:
-                    btn.setText(btn._label)
-                    icon_color = ThemeManager.palette["secondary"]
-                    shadow = QGraphicsDropShadowEffect(btn)
-                    shadow.setBlurRadius(14)
-                    shadow.setOffset(0, 0)
-                    shadow.setColor(QColor(0, 0, 0, 120))
-                    btn.setGraphicsEffect(shadow)
-                else:
-                    btn.setText(btn._label)
-                    icon_color = ThemeManager.palette["primary"]
+            icon_color = ThemeManager.palette["secondary"]
 
             if qta:
                 btn.setIcon(qta.icon(btn._fa_name, color=icon_color))
@@ -265,9 +248,9 @@ class SidebarWidget(QWidget):
             ))
             btn.style().polish(btn)
 
-        # زر الدبوس – اللون الأساسي في جميع الحالات
+        # زر الدبوس – اللون الثانوي في جميع الحالات
         if qta:
-            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["primary"]))
+            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["secondary"]))
         else:
             icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
             self.pin_btn.setIcon(QIcon(str(icon_dir / "pin.svg")))
