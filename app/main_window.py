@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QStackedWidget,
+    QSizePolicy,
 )
 from PySide6.QtCore import Qt
 
@@ -32,10 +33,11 @@ class MainWindow(QMainWindow):
         body_layout.setSpacing(0)
 
         self.sidebar = SidebarWidget()
-        self.sidebar.setFixedWidth(180)
+        self.sidebar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         body_layout.addWidget(self.sidebar)
 
         self.stack = QStackedWidget()
+        self.stack.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         body_layout.addWidget(self.stack, 1)
 
         main_layout.addWidget(body, 1)
