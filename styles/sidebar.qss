@@ -49,6 +49,9 @@ SidebarWidget QPushButton:hover {
 SidebarWidget QPushButton[hovered="true"] {
     /* enlarge font slightly on hover without changing alignment */
     font-size: 14px;
+=======
+    font-size: 14px;
+    text-align: center;
 }
 
 SidebarWidget QPushButton[active="true"] {
