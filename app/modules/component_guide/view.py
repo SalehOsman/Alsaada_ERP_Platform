@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QGroupBox,
     QPushButton,
     QLineEdit,
@@ -18,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-from ...core.style_manager import StyleManager
+from ...core.theme_manager import ThemeManager
 
 
 class ComponentGuideView(QScrollArea):
@@ -31,7 +32,10 @@ class ComponentGuideView(QScrollArea):
         self.setWidget(container)
         layout = QVBoxLayout(container)
         layout.setAlignment(Qt.AlignTop)
+        # Use golden ratio spacing between demo blocks
+        layout.setSpacing(int(ThemeManager.spacing * 1.618))
 
+        layout.addWidget(self._create_palette_preview())
         layout.addWidget(self._create_buttons())
         layout.addWidget(self._create_inputs())
         layout.addWidget(self._create_table())
@@ -40,19 +44,40 @@ class ComponentGuideView(QScrollArea):
         layout.addWidget(self._create_icons())
         layout.addStretch()
 
+    def _create_palette_preview(self) -> QGroupBox:
+        box = QGroupBox("لوحة الألوان")
+        l = QHBoxLayout(box)
+        for key in [
+            "primary",
+            "primary_light",
+            "primary_dark",
+            "secondary",
+            "secondary_light",
+            "secondary_dark",
+            "success",
+            "warning",
+            "error",
+        ]:
+            lbl = QLabel(key)
+            lbl.setObjectName(f"color_{key}")
+            lbl.setProperty("class", "color-preview")
+            lbl.setFixedSize(62, 38)  # width:height ≈ golden ratio
+            l.addWidget(lbl)
+        l.addStretch()
+        return box
+
     def _create_buttons(self) -> QGroupBox:
         box = QGroupBox("الأزرار")
         l = QVBoxLayout(box)
-        l.addWidget(QPushButton("افتراضي"))
+        default_btn = QPushButton("افتراضي")
+        default_btn.setObjectName("defaultButton")
+        l.addWidget(default_btn)
+
         primary = QPushButton("أساسي")
-        primary.setStyleSheet(
-            f"background-color: {StyleManager.primary_color}; color: white;"
-        )
+        primary.setObjectName("primaryButton")
         l.addWidget(primary)
         secondary = QPushButton("ثانوي")
-        secondary.setStyleSheet(
-            f"background-color: {StyleManager.secondary_color}; color: white;"
-        )
+        secondary.setObjectName("secondaryButton")
         l.addWidget(secondary)
         icon_btn = QPushButton("مع أيقونة")
         icon_btn.setIcon(self.style().standardIcon(QStyle.SP_DesktopIcon))
@@ -102,10 +127,10 @@ class ComponentGuideView(QScrollArea):
         lbl1 = QLabel("نص عادي")
         l.addWidget(lbl1)
         primary = QLabel("لون أساسي")
-        primary.setStyleSheet(f"color: {StyleManager.primary_color};")
+        primary.setObjectName("primaryLabel")
         l.addWidget(primary)
         secondary = QLabel("لون ثانوي")
-        secondary.setStyleSheet(f"color: {StyleManager.secondary_color};")
+        secondary.setObjectName("secondaryLabel")
         l.addWidget(secondary)
         return box
 

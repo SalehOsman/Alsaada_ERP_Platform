@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QColor
 from PySide6.QtCore import Qt
 from ...core.style_manager import StyleManager
+from ...core.theme_manager import ThemeManager
 
 
 class SettingsView(QTabWidget):
@@ -59,20 +60,20 @@ class SettingsView(QTabWidget):
 
     # slots
     def _choose_color(self, which: str) -> None:
-        current = getattr(StyleManager, f"{which}_color")
+        current = ThemeManager.palette.get(which, "#ffffff")
         color = QColorDialog.getColor(QColor(current), self)
         if color.isValid():
-            setattr(StyleManager, f"{which}_color", color.name())
+            ThemeManager.update(**{which: color.name()})
             StyleManager.apply()
 
     def _font_changed(self, font: str) -> None:
         if font:
-            StyleManager.font_family = font
+            ThemeManager.update(font_family=font)
             StyleManager.apply()
 
     def _size_changed(self, text: str) -> None:
         size_map = {"كبير": 16, "متوسط": 12, "صغير": 10}
-        StyleManager.font_size = size_map.get(text, 12)
+        ThemeManager.update(font_size=size_map.get(text, 12))
         StyleManager.apply()
 
     def _mode_changed(self, state: int) -> None:

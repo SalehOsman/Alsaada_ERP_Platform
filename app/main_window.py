@@ -10,6 +10,7 @@ from PySide6.QtCore import Qt
 
 from .core.app_router import AppRouter
 from .core.style_manager import StyleManager
+from .core.theme_manager import ThemeManager
 from .widgets import HeaderWidget, SidebarWidget, FooterWidget
 
 
@@ -19,6 +20,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("منصة السعادة")
         self.setLayoutDirection(Qt.RightToLeft)
         StyleManager.apply()
+        ThemeManager.apply()
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -40,7 +42,10 @@ class MainWindow(QMainWindow):
 
         self.stack = QStackedWidget()
         self.stack.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        body_layout.addWidget(self.stack, 1)
+        body_layout.addWidget(self.stack)
+        # Use golden ratio for sidebar vs main area (100:162 ≈ 1:1.618)
+        body_layout.setStretch(0, 100)
+        body_layout.setStretch(1, 162)
 
         main_layout.addWidget(body, 1)
 
