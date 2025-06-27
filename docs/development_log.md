@@ -98,6 +98,21 @@
 
 ---
 
+## 2025-07-03
+
+---
+
+**تعديل القيم الافتراضية للخطوط**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\style_manager.py**
+    - ضبط الخط الافتراضي ليكون Cairo والحجم 10 (صغير).
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\theme_manager.py**
+    - مزامنة القيم الافتراضية للخط والحجم مع StyleManager.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---
+
 ## 2025-07-02
 
 ---

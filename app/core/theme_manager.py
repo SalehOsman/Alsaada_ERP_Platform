@@ -61,8 +61,8 @@ class ThemeManager:
 
     palette: dict[str, str] = dark_palette.copy()
 
-    font_family: str = "Arial"
-    font_size: int = 12
+    font_family: str = "Cairo"
+    font_size: int = 10
 
     radius_small: int = 4
     radius_medium: int = 8
