@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from PySide6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QStyle
-from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject
+from PySide6.QtCore import Signal, QEvent, QPropertyAnimation, QObject
 
 
 class SidebarWidget(QWidget):
