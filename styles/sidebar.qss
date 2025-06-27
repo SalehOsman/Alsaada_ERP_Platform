@@ -54,6 +54,14 @@ SidebarWidget QFrame {
     border-top: 1px solid {secondary_light};
 }
 
+SidebarWidget[collapsed="false"] QFrame {
+    border-color: {primary};
+}
+
+SidebarWidget[collapsed="true"] QFrame {
+    border-color: {secondary};
+}
+
 SidebarWidget QLabel {
     margin-top: {spacing}px;
     margin-bottom: {spacing}px;
