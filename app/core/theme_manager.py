@@ -1,7 +1,7 @@
 # theme_manager.py
 # الغرض: إدارة وتطبيق سمات الألوان والخطوط على الواجهة
 # المؤلف: صالح عثمان
-# تاريخ التعديل: 2025-06-30
+# تاريخ التعديل: 2025-07-06
 
 from __future__ import annotations
 
@@ -12,29 +12,6 @@ from PySide6.QtWidgets import QApplication
 
 class ThemeManager:
     """مدير الثيم المركزي للألوان والتنسيقات."""
-
-    light_palette: dict[str, str] = {
-        "primary": "#f47824",
-        "primary_light": "#ffa96b",
-        "primary_dark": "#b35c1c",
-        "primary_disabled": "#fbd3ba",
-        "secondary": "#333333",
-        "secondary_light": "#4f4f4f",
-        "secondary_dark": "#1a1a1a",
-        "secondary_disabled": "#777777",
-        "success": "#28a745",
-        "warning": "#ffc107",
-        "error": "#dc3545",
-        "sidebar_bg": "#f7f7f7",
-        "sidebar_text": "#333333",
-        "sidebar_hover_bg": "#e0e0e0",
-        "sidebar_hover_bg_alt": "#ffffff",
-        "sidebar_hover_text": "#000000",
-        "sidebar_active_bg": "#f47824",
-        "sidebar_active_text": "#ffffff",
-        "accent": "#f47824",
-        "accent_light": "#ffa96b",
-    }
 
     dark_palette: dict[str, str] = {
         "primary": "#f47824",
@@ -58,6 +35,9 @@ class ThemeManager:
         "accent": "#f47824",
         "accent_light": "#ffa96b",
     }
+
+    # استخدام نفس ألوان الوضع الغامق للوضع الفاتح مؤقتًا
+    light_palette: dict[str, str] = dark_palette.copy()
 
     palette: dict[str, str] = dark_palette.copy()
 
