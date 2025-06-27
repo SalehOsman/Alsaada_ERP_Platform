@@ -124,6 +124,7 @@ class SidebarWidget(QWidget):
                 btn.setText("")
             self.setProperty("collapsed", True)
         self.style().polish(self)
+        self._update_button_shadows()
 
     # ------------------------------------------------------------------
     # أحداث التفاعل
@@ -181,6 +182,7 @@ class SidebarWidget(QWidget):
         self.style().polish(self)
         for btn in self._buttons.values():
             btn.setText(btn._label)
+        self._update_button_shadows()
 
     def collapse(self) -> None:
         """إرجاع الشريط الجانبي إلى وضع الأيقونات فقط."""
@@ -195,11 +197,36 @@ class SidebarWidget(QWidget):
         self.style().polish(self)
         for btn in self._buttons.values():
             btn.setText("")
+        self._update_button_shadows()
 
     # ------------------------------------------------------------------
     # إدارة الضغط على الأزرار
     # ------------------------------------------------------------------
+    def _apply_shadow(self, button: QPushButton) -> None:
+        """Apply drop shadow effect to the active button."""
+        if not isinstance(button.graphicsEffect(), QGraphicsDropShadowEffect):
+            effect = QGraphicsDropShadowEffect(button)
+            effect.setBlurRadius(15)
+            effect.setOffset(0, 0)
+            effect.setColor(QColor(0, 0, 0, 100))
+            button.setGraphicsEffect(effect)
+
+    def _remove_shadow(self, button: QPushButton) -> None:
+        """Remove shadow effect from a button."""
+        if button.graphicsEffect():
+            button.setGraphicsEffect(None)
+
+    def _update_button_shadows(self) -> None:
+        """Update shadows based on active state and sidebar mode."""
+        expanded = not self.property("collapsed")
+        for btn in self._buttons.values():
+            if btn.isChecked() and expanded:
+                self._apply_shadow(btn)
+            else:
+                self._remove_shadow(btn)
+
     def _on_button_clicked(self, key: str) -> None:
         for k, b in self._buttons.items():
             b.setChecked(k == key)
+        self._update_button_shadows()
         self.navigate.emit(key)
