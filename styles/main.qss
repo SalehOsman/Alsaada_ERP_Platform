@@ -4,105 +4,105 @@
    تاريخ التعديل: 2025-06-28
 */
 
-QWidget {
+QWidget {{
     font-family: {font_family};
     font-size: {font_size}pt;
-}
+}}
 
-QPushButton {
+QPushButton {{
     padding: 6px 12px;
     border-radius: {radius_small}px;
-}
+}}
 
-QPushButton#primaryButton {
+QPushButton#primaryButton {{
     background-color: {primary};
     color: white;
-}
-QPushButton#primaryButton:hover {
+}}
+QPushButton#primaryButton:hover {{
     background-color: {primary_light};
-}
-QPushButton#primaryButton:pressed {
+}}
+QPushButton#primaryButton:pressed {{
     background-color: {primary_dark};
-}
-QPushButton#primaryButton:disabled {
+}}
+QPushButton#primaryButton:disabled {{
     background-color: {primary_disabled};
-}
+}}
 
-QPushButton#secondaryButton {
+QPushButton#secondaryButton {{
     background-color: {secondary};
     color: white;
-}
-QPushButton#secondaryButton:hover {
+}}
+QPushButton#secondaryButton:hover {{
     background-color: {secondary_light};
-}
-QPushButton#secondaryButton:pressed {
+}}
+QPushButton#secondaryButton:pressed {{
     background-color: {secondary_dark};
-}
-QPushButton#secondaryButton:disabled {
+}}
+QPushButton#secondaryButton:disabled {{
     background-color: {secondary_disabled};
-}
+}}
 
-QLineEdit, QComboBox, QSpinBox {
+QLineEdit, QComboBox, QSpinBox {{
     border: 1px solid {secondary_light};
     border-radius: {radius_small}px;
     padding: 4px;
-}
-QLineEdit:focus, QComboBox:focus, QSpinBox:focus {
+}}
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus {{
     border-color: {primary};
-}
+}}
 
-QGroupBox {
+QGroupBox {{
     margin-top: {spacing}px;
     border: 1px solid {secondary_light};
     border-radius: {radius_medium}px;
     padding: {spacing}px;
-}
-QGroupBox::title {
+}}
+QGroupBox::title {{
     subcontrol-origin: margin;
     subcontrol-position: top right;
     padding: 0 {spacing}px;
-}
+}}
 
-QTableWidget {
+QTableWidget {{
     border: 1px solid {secondary_light};
-}
-QHeaderView::section {
+}}
+QHeaderView::section {{
     background: {secondary_light};
     padding: 4px;
     border: none;
-}
-QTabWidget::pane {
+}}
+QTabWidget::pane {{
     border: 1px solid {secondary_light};
-}
-QTabBar::tab:selected {
+}}
+QTabBar::tab:selected {{
     background: {primary};
     color: white;
-}
-QTabBar::tab:hover {
+}}
+QTabBar::tab:hover {{
     background: {primary_light};
-}
+}}
 
-QLabel#primaryLabel {
+QLabel#primaryLabel {{
     color: {primary};
-}
-QLabel#secondaryLabel {
+}}
+QLabel#secondaryLabel {{
     color: {secondary};
-}
+}}
 
 /* Palette preview labels */
-QLabel[class="color-preview"] {
+QLabel[class="color-preview"] {{
     min-width: 60px;
     border-radius: {radius_small}px;
     padding: 4px;
     color: white;
     margin-right: 4px;
-}
-#color_primary { background: {primary}; }
-#color_primary_light { background: {primary_light}; }
-#color_primary_dark { background: {primary_dark}; }
-#color_secondary { background: {secondary}; }
-#color_secondary_light { background: {secondary_light}; }
-#color_secondary_dark { background: {secondary_dark}; }
-#color_success { background: {success}; }
-#color_warning { background: {warning}; color: black; }
-#color_error { background: {error}; }
+}}
+#color_primary {{ background: {primary}; }}
+#color_primary_light {{ background: {primary_light}; }}
+#color_primary_dark {{ background: {primary_dark}; }}
+#color_secondary {{ background: {secondary}; }}
+#color_secondary_light {{ background: {secondary_light}; }}
+#color_secondary_dark {{ background: {secondary_dark}; }}
+#color_success {{ background: {success}; }}
+#color_warning {{ background: {warning}; color: black; }}
+#color_error {{ background: {error}; }}
