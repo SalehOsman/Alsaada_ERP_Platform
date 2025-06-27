@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from PySide6.QtWidgets import QApplication
 
 
@@ -59,7 +60,15 @@ class ThemeManager:
                 "radius_medium": cls.radius_medium,
                 "spacing": cls.spacing,
             }
-            app.setStyleSheet(qss_template.format(**variables))
+            # Replace placeholders like {primary} without requiring escaping
+            # of CSS braces used in the QSS files.
+            pattern = re.compile(r"{([a-zA-Z0-9_]+)}")
+
+            def replace(match: re.Match) -> str:
+                return str(variables.get(match.group(1), match.group(0)))
+
+            qss = pattern.sub(replace, qss_template)
+            app.setStyleSheet(qss)
 
     @classmethod
     def update(cls, **kwargs: str) -> None:
