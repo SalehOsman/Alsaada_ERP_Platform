@@ -1,2 +1,14 @@
-__pycache__/
+db
+resources
+tests
+.git
+.gitignore
+Alsaada_ERP_Platform_Backup
+venv
+env
+.env
+.vscode
+__pycache__
 *.pyc
+*.pyo
+*.log

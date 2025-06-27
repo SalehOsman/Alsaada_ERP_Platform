@@ -1,118 +1,99 @@
 # sidebar.py
-# الغرض: ودجت الشريط الجانبي المتفاعل مع دعم التثبيت والوضع الليلي وتغيير الألوان ديناميكياً
-# المؤلف: صالح عثمان
-# تاريخ التعديل: 2025-06-30
+# جميع العناصر غير الفعالة محاذاة شمال (left) عند الفتح
+# العنصر الفعال وسط – مع شادو – أيقونة الدبوس بالأساسي دائماً
+# صالح عثمان – 2025-06-30
 
 from __future__ import annotations
 
 from pathlib import Path
 from PySide6.QtWidgets import (
-    QWidget,
-    QPushButton,
-    QVBoxLayout,
-    QLabel,
-    QFrame,
-    QGraphicsDropShadowEffect,
+    QWidget, QPushButton, QVBoxLayout, QGraphicsDropShadowEffect, QFrame, QSizePolicy
 )
-from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings
-from PySide6.QtGui import QIcon, QColor
+from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings, QSize
+from PySide6.QtGui import QIcon, QColor, QFont
 from ..core.theme_manager import ThemeManager
 
 try:
     import qtawesome as qta
-except Exception:  # pragma: no cover - optional dependency
+except Exception:
     qta = None
 
-
 class SidebarWidget(QWidget):
-    """ودجت شريط جانبي يظهر أيقونات فقط ويتوسع عند التفاعل."""
-
     navigate = Signal(str)
     PIN_KEY = "sidebar_pinned"
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
+        self.setObjectName("SidebarWidget")
         self._collapsed_width = 60
         self._expanded_width = 200
+        self._icon_size_collapsed = 36
+        self._icon_size_expanded = 24
         self.settings = QSettings("AlsaadaERP", "AlsaadaERP")
         self.pinned = self.settings.value(self.PIN_KEY, False, bool)
-        self.setFixedWidth(
-            self._expanded_width if self.pinned else self._collapsed_width
-        )
+        self.setFixedWidth(self._expanded_width if self.pinned else self._collapsed_width)
         self.setProperty("collapsed", not self.pinned)
         self.setMouseTracking(True)
 
-        shadow = QGraphicsDropShadowEffect(self)
-        shadow.setBlurRadius(15)
-        shadow.setOffset(-3, 0)
-        shadow.setColor(QColor(0, 0, 0, 60))
-        self.setGraphicsEffect(shadow)
+        # شادو يسار القائمة فقط
+        self.shadow = QGraphicsDropShadowEffect(self)
+        self.shadow.setBlurRadius(32)
+        self.shadow.setOffset(-12, 0)
+        self.shadow.setColor(QColor(0, 0, 0, 130))
+        self.setGraphicsEffect(self.shadow)
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(10)
+        # إطار رئيسي لضبط الخلفية يدويًا
+        self.frame = QFrame(self)
+        self.frame.setObjectName("SidebarMainFrame")
+        self.frame.setGeometry(0, 0, self._collapsed_width, self.height())
+        self._refresh_sidebar_style(collapsed=not self.pinned)
+
+        # layout داخلي
+        layout = QVBoxLayout(self.frame)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         self._buttons: dict[str, QPushButton] = {}
+        self._section_keys = []
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
         sections = [
-            (
-                "dashboard",
-                "الرئيسية",
-                "fa5s.tachometer-alt",
-                icon_dir / "dashboard.svg",
-            ),
-            (
-                "component_guide",
-                "دليل المكونات",
-                "fa5s.puzzle-piece",
-                icon_dir / "guide.svg",
-            ),
+            ("dashboard", "الرئيسية", "fa5s.tachometer-alt", icon_dir / "dashboard.svg"),
+            ("component_guide", "دليل المكونات", "fa5s.puzzle-piece", icon_dir / "guide.svg"),
             ("employees", "العاملون", "fa5s.users", icon_dir / "employees.svg"),
             ("finance", "المالية", "fa5s.chart-line", icon_dir / "finance.svg"),
             ("equipment", "المعدات", "fa5s.tools", icon_dir / "equipment.svg"),
             ("projects", "المشاريع", "fa5s.project-diagram", icon_dir / "projects.svg"),
-            (
-                "daily_ops",
-                "العمليات اليومية",
-                "fa5s.calendar-alt",
-                icon_dir / "daily_ops.svg",
-            ),
+            ("daily_ops", "العمليات اليومية", "fa5s.calendar-alt", icon_dir / "daily_ops.svg"),
             ("notes", "الملاحظات", "fa5s.sticky-note", icon_dir / "notes.svg"),
             ("settings", "الإعدادات", "fa5s.cog", icon_dir / "settings.svg"),
         ]
 
-        for i, (key, text, fa_name, icon) in enumerate(sections):
-            button = QPushButton("", self)
-            button.setLayoutDirection(Qt.RightToLeft)
-            button._fa_name = fa_name  # type: ignore[attr-defined]
-            button._icon_path = icon  # type: ignore[attr-defined]
-            if qta:
-                button.setIcon(
-                    qta.icon(fa_name, color=ThemeManager.palette["primary"])
-                )
-            else:
-                button.setIcon(QIcon(str(icon)))
+        for idx, (key, text, fa_name, icon) in enumerate(sections):
+            button = QPushButton("", self.frame)
+            button.setLayoutDirection(Qt.LeftToRight)  # <-- التغيير هنا!
+            button.setCursor(Qt.PointingHandCursor)
+            button._fa_name = fa_name
+            button._icon_path = icon
             button.setToolTip(text)
             button.setCheckable(True)
-            button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
             button.installEventFilter(self)
-            button._label = text  # type: ignore[attr-defined]
-            layout.addWidget(button)
+            button._label = text
+            button.setMinimumHeight(52)
+            button.setMaximumHeight(60)
+            button.setFont(QFont("Cairo", 12))
+            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            button.clicked.connect(lambda _=False, k=key: self._on_button_clicked(k))
             self._buttons[key] = button
-            if i < len(sections) - 1:
-                sep = QFrame()
-                sep.setFrameShape(QFrame.HLine)
-                layout.addWidget(sep)
+            self._section_keys.append(key)
+            layout.addWidget(button)
 
-        divider = QFrame()
-        divider.setFrameShape(QFrame.HLine)
-        layout.addWidget(divider)
-        layout.addWidget(QLabel("اختصارات"))
         layout.addStretch()
-
-        self.pin_btn = QPushButton("", self)
+        self.pin_btn = QPushButton("", self.frame)
         self.pin_btn.setCheckable(True)
         self.pin_btn.setChecked(self.pinned)
+        self.pin_btn.setMinimumHeight(45)
+        self.pin_btn.setMaximumHeight(52)
+        self.pin_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self._update_pin_icon()
         self.pin_btn.clicked.connect(self._toggle_pinned)
         layout.addWidget(self.pin_btn)
@@ -120,22 +101,14 @@ class SidebarWidget(QWidget):
         self._animation = QPropertyAnimation(self, b"minimumWidth")
         self._animation.setDuration(200)
 
-        if self.pinned:
-            for btn in self._buttons.values():
-                btn.setText(btn._label)
-            self.setProperty("collapsed", False)
-        else:
-            for btn in self._buttons.values():
-                btn.setText("")
-            self.setProperty("collapsed", True)
-        self.style().polish(self)
-        self._update_button_icons()
-        self._update_button_shadows()
+        self._active_key = "dashboard"
+        self._update_selection()
 
-    # ------------------------------------------------------------------
-    # أحداث التفاعل
-    # ------------------------------------------------------------------
-    def eventFilter(self, obj: QObject, event: QEvent) -> bool:  # type: ignore[name-defined]
+    def resizeEvent(self, event):
+        self.frame.setGeometry(0, 0, self.width(), self.height())
+        super().resizeEvent(event)
+
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         if isinstance(obj, QPushButton) and event.type() == QEvent.Enter:
             if not self.pinned:
                 self.expand()
@@ -151,9 +124,6 @@ class SidebarWidget(QWidget):
             self.collapse()
         super().leaveEvent(event)
 
-    # ------------------------------------------------------------------
-    # التحكم في التثبيت
-    # ------------------------------------------------------------------
     def _toggle_pinned(self) -> None:
         self.pinned = self.pin_btn.isChecked()
         self._update_pin_icon()
@@ -165,18 +135,15 @@ class SidebarWidget(QWidget):
 
     def _update_pin_icon(self) -> None:
         icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
+        fa_color = ThemeManager.palette["primary"]
         name = "unpin.svg" if self.pinned else "pin.svg"
         if qta:
             fa_name = "fa5s.times" if self.pinned else "fa5s.thumbtack"
-            self.pin_btn.setIcon(qta.icon(fa_name, color=ThemeManager.palette["primary"]))
+            self.pin_btn.setIcon(qta.icon(fa_name, color=fa_color))
         else:
             self.pin_btn.setIcon(QIcon(str(icon_dir / name)))
 
-    # ------------------------------------------------------------------
-    # التحويل بين الوضعين
-    # ------------------------------------------------------------------
     def expand(self) -> None:
-        """توسيع الشريط الجانبي وإظهار أسماء الأقسام."""
         if self.width() == self._expanded_width:
             return
         self.setMaximumWidth(self._expanded_width)
@@ -185,14 +152,10 @@ class SidebarWidget(QWidget):
         self._animation.setEndValue(self._expanded_width)
         self._animation.start()
         self.setProperty("collapsed", False)
-        self.style().polish(self)
-        self._update_button_icons()
-        for btn in self._buttons.values():
-            btn.setText(btn._label)
-        self._update_button_shadows()
+        self._refresh_sidebar_style(collapsed=False)
+        self._update_selection()
 
     def collapse(self) -> None:
-        """إرجاع الشريط الجانبي إلى وضع الأيقونات فقط."""
         if self.width() == self._collapsed_width:
             return
         self.setMaximumWidth(self._collapsed_width)
@@ -201,50 +164,87 @@ class SidebarWidget(QWidget):
         self._animation.setEndValue(self._collapsed_width)
         self._animation.start()
         self.setProperty("collapsed", True)
+        self._refresh_sidebar_style(collapsed=True)
+        self._update_selection()
+
+    def _refresh_sidebar_style(self, collapsed: bool):
+        # لون خلفية الشريط الجانبي بحسب الحالة – مع شادو واضح دائمًا
+        if not collapsed:
+            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["secondary"]))
+        else:
+            self.frame.setStyleSheet("background: {}; border: none;".format(ThemeManager.palette["primary"]))
+        self.shadow.setColor(QColor(0, 0, 0, 130))
         self.style().polish(self)
-        self._update_button_icons()
-        for btn in self._buttons.values():
-            btn.setText("")
-        self._update_button_shadows()
+        self.frame.update()
 
-    # ------------------------------------------------------------------
-    # إدارة الضغط على الأزرار
-    # ------------------------------------------------------------------
-    def _apply_shadow(self, button: QPushButton) -> None:
-        """Apply drop shadow effect to the active button."""
-        if not isinstance(button.graphicsEffect(), QGraphicsDropShadowEffect):
-            effect = QGraphicsDropShadowEffect(button)
-            effect.setBlurRadius(15)
-            effect.setOffset(0, 0)
-            effect.setColor(QColor(0, 0, 0, 100))
-            button.setGraphicsEffect(effect)
-
-    def _remove_shadow(self, button: QPushButton) -> None:
-        """Remove shadow effect from a button."""
-        if button.graphicsEffect():
-            button.setGraphicsEffect(None)
-
-    def _update_button_icons(self) -> None:
-        """Update icon colors based on collapsed state."""
+    def _update_selection(self):
         collapsed = self.property("collapsed")
-        color_key = "secondary" if collapsed else "primary"
-        for btn in self._buttons.values():
+        # العنصر الفعال الافتراضي إذا لم يضغط المستخدم
+        if not any(btn.isChecked() for btn in self._buttons.values()):
+            self._buttons[self._active_key].setChecked(True)
+
+        for key, btn in self._buttons.items():
+            is_active = btn.isChecked()
+            btn.setGraphicsEffect(None)
+            if collapsed:
+                btn.setText("")
+                icon_color = ThemeManager.palette["secondary"]
+                btn.setStyleSheet(
+                    "background: transparent; border: none; margin: 0; padding: 0;"
+                    f"qproperty-iconSize: {self._icon_size_collapsed}px {self._icon_size_collapsed}px;"
+                )
+            else:
+                if is_active:
+                    btn.setText(btn._label)
+                    icon_color = ThemeManager.palette["secondary"]
+                    btn.setStyleSheet(
+                        f"""
+                        background: {ThemeManager.palette['primary']};
+                        color: {ThemeManager.palette['secondary']};
+                        border: none;
+                        text-align: center;
+                        font-weight: bold;
+                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
+                        """
+                    )
+                    # شادو خفيف للزر الفعال فقط
+                    shadow = QGraphicsDropShadowEffect(btn)
+                    shadow.setBlurRadius(14)
+                    shadow.setOffset(0, 0)
+                    shadow.setColor(QColor(0, 0, 0, 120))
+                    btn.setGraphicsEffect(shadow)
+                else:
+                    btn.setText(btn._label)
+                    icon_color = ThemeManager.palette["primary"]
+                    btn.setStyleSheet(
+                        f"""
+                        background: transparent;
+                        color: {ThemeManager.palette['primary']};
+                        border: none;
+                        text-align: left;
+                        font-weight: bold;
+                        qproperty-iconSize: {self._icon_size_expanded}px {self._icon_size_expanded}px;
+                        """
+                    )
             if qta:
-                btn.setIcon(qta.icon(btn._fa_name, color=ThemeManager.palette[color_key]))
+                btn.setIcon(qta.icon(btn._fa_name, color=icon_color))
             else:
                 btn.setIcon(QIcon(str(btn._icon_path)))
+            btn.setIconSize(QSize(
+                self._icon_size_collapsed if collapsed else self._icon_size_expanded,
+                self._icon_size_collapsed if collapsed else self._icon_size_expanded
+            ))
 
-    def _update_button_shadows(self) -> None:
-        """Update shadows based on active state and sidebar mode."""
-        expanded = not self.property("collapsed")
-        for btn in self._buttons.values():
-            if btn.isChecked() and expanded:
-                self._apply_shadow(btn)
-            else:
-                self._remove_shadow(btn)
+        # زر الدبوس – اللون الأساسي في جميع الحالات
+        if qta:
+            self.pin_btn.setIcon(qta.icon("fa5s.thumbtack", color=ThemeManager.palette["primary"]))
+        else:
+            icon_dir = Path(__file__).resolve().parents[2] / "styles" / "icons"
+            self.pin_btn.setIcon(QIcon(str(icon_dir / "pin.svg")))
 
     def _on_button_clicked(self, key: str) -> None:
         for k, b in self._buttons.items():
             b.setChecked(k == key)
-        self._update_button_shadows()
+        self._active_key = key
+        self._update_selection()
         self.navigate.emit(key)
