@@ -1,0 +1,25 @@
+/* Sidebar styles */
+SidebarWidget {{
+    background: {sidebar_bg};
+}}
+SidebarWidget QPushButton {{
+    color: {sidebar_text};
+    text-align: left;
+    padding: {spacing}px;
+    border-radius: {radius_small}px;
+    background: transparent;
+}}
+SidebarWidget QPushButton:hover {{
+    background: {sidebar_hover_bg};
+    color: {sidebar_hover_text};
+}}
+SidebarWidget QPushButton:checked,
+SidebarWidget QPushButton:pressed {{
+    background: {sidebar_active_bg};
+    color: {sidebar_active_text};
+}}
+SidebarWidget QLabel {{
+    color: {sidebar_text};
+    margin-top: {spacing}px;
+    margin-bottom: {spacing}px;
+}}

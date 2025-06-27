@@ -20,6 +20,13 @@ class ThemeManager:
         "success": "#28a745",
         "warning": "#ffc107",
         "error": "#dc3545",
+        # Sidebar specific colors
+        "sidebar_bg": "#2c2c2c",
+        "sidebar_text": "#f0f0f0",
+        "sidebar_hover_bg": "#444444",
+        "sidebar_hover_text": "#ffffff",
+        "sidebar_active_bg": "#f47824",
+        "sidebar_active_text": "#ffffff",
     }
 
     font_family: str = "Arial"
@@ -36,10 +43,14 @@ class ThemeManager:
         if not app:
             return
         style_dir = Path(__file__).resolve().parents[2] / "styles"
-        qss_path = style_dir / "main.qss"
-        if qss_path.exists():
-            with open(qss_path, "r", encoding="utf-8") as f:
-                qss_template = f.read()
+        qss_contents: list[str] = []
+        for name in ("main.qss", "sidebar.qss"):
+            path = style_dir / name
+            if path.exists():
+                with open(path, "r", encoding="utf-8") as f:
+                    qss_contents.append(f.read())
+        if qss_contents:
+            qss_template = "\n".join(qss_contents)
             variables = {
                 **cls.palette,
                 "font_family": cls.font_family,
