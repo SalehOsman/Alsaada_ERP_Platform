@@ -53,6 +53,13 @@ SidebarWidget QPushButton[active="true"] {
     color: {secondary};
 }
 
+/* توسيط العنصر الفعّال عند فتح القائمة لكل من الوضعين الغامق والفاتح */
+SidebarWidget[collapsed="false"] QPushButton[active="true"] {
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+}
+
 
 SidebarWidget QFrame {
     margin-top: {spacing}px;
