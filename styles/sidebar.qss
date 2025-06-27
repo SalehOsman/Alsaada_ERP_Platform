@@ -26,19 +26,16 @@ SidebarWidget QPushButton {
     border-radius: {radius_small}px;
     background: transparent;
     font-weight: bold;
+    padding: {spacing}px;
 }
 
 SidebarWidget[collapsed="true"] QPushButton {
-    padding-left: 0px;
-    padding-right: 0px;
     text-align: center;
     color: {secondary};
     qproperty-iconSize: {icon_size_collapsed}px {icon_size_collapsed}px;
 }
 
 SidebarWidget[collapsed="false"] QPushButton {
-    padding-left: {spacing}px;
-    padding-right: {spacing}px;
     text-align: left;
     color: {secondary};
     qproperty-iconSize: {icon_size_expanded}px {icon_size_expanded}px;
@@ -48,9 +45,20 @@ SidebarWidget QPushButton:hover {
     background: transparent;
 }
 
+SidebarWidget QPushButton[hovered="true"] {
+    font-size: 14px;
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 SidebarWidget QPushButton[active="true"] {
     background: transparent;
     color: {secondary};
+    font-size: 14px;
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* توسيط العنصر الفعّال عند فتح القائمة لكل من الوضعين الغامق والفاتح */
