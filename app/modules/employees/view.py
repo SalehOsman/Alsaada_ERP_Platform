@@ -2,10 +2,14 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTabWidget
 
 
 class EmployeesView(QTabWidget):
+    SECTION_TITLE = "العاملون"
+
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
-        self.addTab(self._create_tab('محتوى التبويب 1'), 'تبويب 1')
-        self.addTab(self._create_tab('محتوى التبويب 2'), 'تبويب 2')
+
+        for i in (1, 2):
+            tab_name = f"تبويب {i} {self.SECTION_TITLE}"
+            self.addTab(self._create_tab(f"محتوى {tab_name}"), tab_name)
 
     def _create_tab(self, text: str) -> QWidget:
         widget = QWidget()
