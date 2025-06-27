@@ -69,3 +69,31 @@
 > أي قسم جديد أو تعديل مستقبلي يجب توثيقه بنفس النمط (تاريخ - مسار الملف - وصف التعديل).
 
 **مسطر تجريبة:**  
+
+## 2025-06-27
+
+---
+
+**إضافة صفحة دليل المكونات**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\modules\component_guide\view.py**
+    - إنشاء صفحة تستعرض المكونات الأساسية للتطبيق (أزرار، جداول، حقول، حوارات، تبويبات، تسميات وأيقونات) مع دعم العربية واتجاه RTL.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\modules\component_guide\__init__.py**
+    - تصدير الواجهة الجديدة.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\app_router.py**
+    - إضافة مسار "component_guide" لعرض الصفحة الجديدة.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\widgets\sidebar.py**
+    - إظهار "دليل المكونات" في الشريط الجانبي.
+
+**تحسين الإعدادات وإدارة المظهر**
+
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\core\style_manager.py**
+    - إضافة مدير أنماط بسيط للتحكم في الألوان والخط والوضع الليلي.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\modules\settings\view.py**
+    - استبدال تبويب 1 بتبويب "المظهر" يتيح تغيير الألوان والخط والحجم والوضع الليلي مع تطبيق فوري.
+- **D:\Alsaada-ERP\Alsaada_ERP_Platform\app\main_window.py**
+    - استدعاء StyleManager لتطبيق المظهر عند تشغيل التطبيق.
+
+**جميع التعديلات الحالية تمت بواسطة: صالح عثمان**
+
+---

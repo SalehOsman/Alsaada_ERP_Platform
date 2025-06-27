@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 
 from .core.app_router import AppRouter
+from .core.style_manager import StyleManager
 from .widgets import HeaderWidget, SidebarWidget, FooterWidget
 
 
@@ -17,6 +18,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("منصة السعادة")
         self.setLayoutDirection(Qt.RightToLeft)
+        StyleManager.apply()
 
         central = QWidget()
         self.setCentralWidget(central)

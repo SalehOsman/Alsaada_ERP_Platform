@@ -16,6 +16,7 @@ class SidebarWidget(QWidget):
         self._buttons: dict[str, QPushButton] = {}
         sections = [
             ("dashboard", "الرئيسية"),
+            ("component_guide", "دليل المكونات"),
             ("employees", "العاملون"),
             ("finance", "المالية"),
             ("equipment", "المعدات"),
