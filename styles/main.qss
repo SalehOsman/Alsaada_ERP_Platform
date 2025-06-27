@@ -1,4 +1,8 @@
-/* Global application styles using ThemeManager variables */
+/* main.qss
+   الغرض: التنسيقات العامة للتطبيق
+   المؤلف: صالح عثمان
+   تاريخ التعديل: 2025-06-28
+*/
 
 QWidget {{
     font-family: {font_family};
