@@ -31,4 +31,4 @@ class StyleManager:
         app.setFont(font)
         ThemeManager.font_family = cls.font_family
         ThemeManager.font_size = cls.font_size
-        ThemeManager.switch_mode(cls.dark_mode)
+        ThemeManager.apply()
