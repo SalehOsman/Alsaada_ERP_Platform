@@ -18,6 +18,7 @@ class AppRouter(QObject):
             "projects": "app.modules.projects.view.ProjectsView",
             "daily_ops": "app.modules.daily_ops.view.DailyOpsView",
             "notes": "app.modules.notes.view.NotesView",
+            "component_guide": "app.modules.component_guide.view.ComponentGuideView",
             "settings": "app.modules.settings.view.SettingsView",
         }
 
