@@ -85,8 +85,7 @@ class ThemeManager:
             return
         style_dir = Path(__file__).resolve().parents[2] / "styles"
         qss_contents: list[str] = []
-        for name in ("main.qss", "sidebar.qss"):
-            path = style_dir / name
+        for path in sorted(style_dir.glob("*.qss")):
             if path.exists():
                 with open(path, "r", encoding="utf-8") as f:
                     qss_contents.append(f.read())
