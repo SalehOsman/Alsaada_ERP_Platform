@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal, QEvent, QPropertyAnimation, QObject, QSettings
 from PySide6.QtGui import QIcon, QColor
+from ..core.theme_manager import ThemeManager
 
 try:
     import qtawesome as qta
@@ -84,7 +85,9 @@ class SidebarWidget(QWidget):
             button = QPushButton("", self)
             button.setLayoutDirection(Qt.RightToLeft)
             if qta:
-                button.setIcon(qta.icon(fa_name))
+                button.setIcon(
+                    qta.icon(fa_name, color=ThemeManager.palette["primary"])
+                )
             else:
                 button.setIcon(QIcon(str(icon)))
             button.setToolTip(text)
@@ -162,7 +165,7 @@ class SidebarWidget(QWidget):
         name = "unpin.svg" if self.pinned else "pin.svg"
         if qta:
             fa_name = "fa5s.times" if self.pinned else "fa5s.thumbtack"
-            self.pin_btn.setIcon(qta.icon(fa_name))
+            self.pin_btn.setIcon(qta.icon(fa_name, color=ThemeManager.palette["primary"]))
         else:
             self.pin_btn.setIcon(QIcon(str(icon_dir / name)))
 
