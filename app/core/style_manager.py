@@ -8,8 +8,8 @@ from .theme_manager import ThemeManager
 class StyleManager:
     """إدارة الخطوط وتطبيق الوضع الليلي."""
 
-    font_family: str = "Arial"
-    font_size: int = 12
+    font_family: str = "Cairo"
+    font_size: int = 10
     dark_mode: bool = True
 
     @classmethod
