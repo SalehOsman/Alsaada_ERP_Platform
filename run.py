@@ -1,17 +1,26 @@
-import sys
-from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
+"""
+اسم الملف: run.py
+الغرض: نقطة التشغيل الأساسية لتطبيق منصة السعادة ERP - فتح الواجهة الرئيسية باستخدام PyWebview.
+المؤلف: صالح عثمان
+تاريخ الإنشاء: 2024-06-29
+آخر تعديل: 2024-06-29
+شرح: هذا السكريبت يُشغّل نافذة التطبيق ويعرض صفحة main.html من مجلد templates.
+"""
 
-from app.main_window import MainWindow
+import webview
+import os
 
+# مسار صفحة الواجهة الرئيسية (HTML)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MAIN_PAGE = os.path.join(BASE_DIR, "web", "templates", "main.html")
 
-def main() -> None:
-    app = QApplication(sys.argv)
-    app.setLayoutDirection(Qt.RightToLeft)
-    window = MainWindow()
-    window.showMaximized()
-    sys.exit(app.exec())
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    # فتح نافذة التطبيق مع تفعيل دعم RTL
+    webview.create_window(
+        title="منصة السعادة ERP",
+        url=MAIN_PAGE,
+        width=1200,
+        height=800,
+        resizable=True
+    )
+    webview.start()
